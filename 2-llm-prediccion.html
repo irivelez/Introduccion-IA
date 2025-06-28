@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción Iterativa de LLMs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #ED6237;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .explanation {
+            background: linear-gradient(135deg, #ED6237, #f39c12);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .explanation h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .demonstration {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .demo-controls {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .start-button {
+            background: rgba(255,255,255,0.9);
+            color: #22c55e;
+            border: 2px solid #22c55e;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .start-button:hover {
+            background: #22c55e;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+        }
+
+        .start-button.active {
+            background: #ED6237;
+            color: white;
+            border-color: #ED6237;
+            box-shadow: 0 4px 15px rgba(237, 98, 55, 0.3);
+        }
+
+        .start-button:disabled {
+            background: #9ca3af;
+            color: white;
+            border-color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .iteration-display {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .iteration-step {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .input-output-flow {
+            display: grid;
+            grid-template-columns: 2fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .input-section {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .input-label {
+            font-size: 0.9rem;
+            color: #1976d2;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-text {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .new-word {
+            background: #22c55e;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            animation: highlight 0.8s ease-in-out;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #ED6237;
+            text-align: center;
+        }
+
+        .output-section {
+            background: #fff3e0;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #ff9800;
+            text-align: center;
+        }
+
+        .output-label {
+            font-size: 0.9rem;
+            color: #f57c00;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .predicted-word {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: #ED6237;
+            font-weight: bold;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 2px solid #ED6237;
+            display: inline-block;
+        }
+
+        .probability-section {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+
+        .probability-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+            height: 30px;
+        }
+
+        .probability-fill {
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: width 1s ease-in-out;
+        }
+
+        .thinking-process {
+            background: #fef3c7;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .thinking-label {
+            font-size: 0.9rem;
+            color: #d97706;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .thinking-text {
+            font-style: italic;
+            color: #92400e;
+        }
+
+        .final-result {
+            background: #dcfce7;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+            border: 2px solid #22c55e;
+            display: none;
+        }
+
+        .final-result h3 {
+            color: #166534;
+            margin-bottom: 1rem;
+        }
+
+        .final-sentence {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            color: #333;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .reset-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .reset-button:hover {
+            background: #4b5563;
+        }
+
+        .back-to-course-button {
+            background: #ED6237;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-to-course-button:hover {
+            background: #d55531;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(237, 98, 55, 0.4);
+        }
+
+        @keyframes highlight {
+            0% { background: #fbbf24; transform: scale(1.1); }
+            100% { background: #22c55e; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .input-output-flow {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Predicción Iterativa de LLMs</h1>
+            <p>Observa cómo un modelo de lenguaje construye respuestas palabra por palabra</p>
+        </div>
+
+        <div class="explanation">
+            <h3>💡 Concepto Clave</h3>
+            <p>Los LLMs no generan texto completo de una vez. En su lugar, predicen una palabra a la vez, usando todo el texto anterior como contexto para decidir qué palabra debería venir después.</p>
+        </div>
+
+        <div class="demonstration">
+            <div class="demo-controls">
+                <button class="start-button" id="startBtn" onclick="startIteration()">
+                    🚀 Iniciar Predicción Iterativa
+                </button>
+            </div>
+
+            <div class="iteration-display" id="iterationDisplay">
+                <div id="iterationsContainer"></div>
+            </div>
+
+            <div class="final-result" id="finalResult">
+                <h3>✅ ¡Predicción Completa!</h3>
+                <p>El LLM ha construido la frase completa:</p>
+                <div class="final-sentence" id="finalSentence"></div>
+                <p>Cada palabra fue predicha basándose en todo el contexto anterior.</p>
+                <button class="reset-button" onclick="resetDemo()">🔄 Intentar de Nuevo</button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="back-to-course-button" onclick="backToCourse()">
+                ← Volver al Curso
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const demoSentence = {
+            initial: "La capital de Francia es",
+            predictions: [
+                {
+                    word: "París",
+                    probability: 96.8,
+                    thinking: "El modelo reconoce el patrón 'La capital de [país] es' y basándose en millones de textos, sabe que después de 'La capital de Francia es' viene 'París' en el 96.8% de los casos."
+                },
+                {
+                    word: "una",
+                    probability: 89.4,
+                    thinking: "Ahora el contexto es 'La capital de Francia es París'. El modelo predice que la siguiente palabra más probable es 'una' para formar 'París una [descripción]'."
+                },
+                {
+                    word: "ciudad",
+                    probability: 92.1,
+                    thinking: "Con 'La capital de Francia es París una', el modelo reconoce que se está describiendo París y predice 'ciudad' como la palabra más lógica."
+                },
+                {
+                    word: "hermosa",
+                    probability: 78.5,
+                    thinking: "Para completar 'París una ciudad', el modelo busca adjetivos comunes que describan París y encuentra que 'hermosa' es muy frecuente en este contexto."
+                }
+            ]
+        };
+
+        let currentIteration = 0;
+        let isRunning = false;
+
+        function startIteration() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            currentIteration = 0;
+            
+            const startBtn = document.getElementById('startBtn');
+            startBtn.disabled = true;
+            startBtn.classList.add('active');
+            startBtn.textContent = '⏳ Generando...';
+            
+            document.getElementById('iterationDisplay').style.display = 'block';
+            document.getElementById('finalResult').style.display = 'none';
+            document.getElementById('iterationsContainer').innerHTML = '';
+
+            // Iniciar la primera iteración después de una pausa
+            setTimeout(() => {
+                runIteration();
+            }, 1000);
+        }
+
+        function runIteration() {
+            if (currentIteration >= demoSentence.predictions.length) {
+                showFinalResult();
+                return;
+            }
+
+            const prediction = demoSentence.predictions[currentIteration];
+            const container = document.getElementById('iterationsContainer');
+            
+            // Construir el texto de entrada actual
+            let currentInput = demoSentence.initial;
+            for (let i = 0; i < currentIteration; i++) {
+                currentInput += " " + demoSentence.predictions[i].word;
+            }
+
+            // Crear el elemento de iteración
+            const iterationEl = document.createElement('div');
+            iterationEl.className = 'iteration-step';
+            iterationEl.style.opacity = '0';
+            iterationEl.style.transform = 'translateY(20px)';
+            
+            iterationEl.innerHTML = `
+                <div class="step-number">Iteración ${currentIteration + 1}</div>
+                
+                <div class="thinking-process">
+                    <div class="thinking-label">🤔 Proceso de pensamiento:</div>
+                    <div class="thinking-text">${prediction.thinking}</div>
+                </div>
+
+                <div class="input-output-flow">
+                    <div class="input-section">
+                        <div class="input-label">📥 ENTRADA (Contexto)</div>
+                        <div class="input-text">"${currentInput}"</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">📤 PREDICCIÓN</div>
+                        <div class="predicted-word">${prediction.word}</div>
+                        <div class="probability-section">
+                            <div style="font-size: 0.9rem; margin-bottom: 0.5rem; color: #666;">Probabilidad:</div>
+                            <div class="probability-bar">
+                                <div class="probability-fill" style="width: 0%">${prediction.probability}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(iterationEl);
+            
+            // Animar la aparición
+            setTimeout(() => {
+                iterationEl.style.transition = 'all 0.5s ease';
+                iterationEl.style.opacity = '1';
+                iterationEl.style.transform = 'translateY(0)';
+                
+                // Animar la barra de probabilidad
+                setTimeout(() => {
+                    const probBar = iterationEl.querySelector('.probability-fill');
+                    probBar.style.width = prediction.probability + '%';
+                }, 500);
+                
+            }, 100);
+
+            currentIteration++;
+            
+            // Continuar con la siguiente iteración
+            setTimeout(() => {
+                runIteration();
+            }, 3000);
+        }
+
+        function showFinalResult() {
+            isRunning = false;
+            
+            // Construir la frase final
+            let finalSentence = demoSentence.initial;
+            demoSentence.predictions.forEach(pred => {
+                finalSentence += " " + pred.word;
+            });
+            
+            document.getElementById('finalSentence').textContent = `"${finalSentence}"`;
+            document.getElementById('finalResult').style.display = 'block';
+            
+            // Scroll suave al resultado final
+            document.getElementById('finalResult').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+
+        function resetDemo() {
+            isRunning = false;
+            currentIteration = 0;
+            
+            const startBtn = document.getElementById('startBtn');
+            startBtn.disabled = false;
+            startBtn.classList.remove('active');
+            startBtn.textContent = '🚀 Iniciar Predicción Iterativa';
+            
+            document.getElementById('iterationDisplay').style.display = 'none';
+            document.getElementById('finalResult').style.display = 'none';
+            document.getElementById('iterationsContainer').innerHTML = '';
+        }
+
+        function backToCourse() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

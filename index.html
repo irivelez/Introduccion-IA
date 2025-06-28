@@ -44,24 +44,22 @@
             margin: 0 auto;
         }
 
-        .lessons-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
         }
 
         .lesson-card {
             background: white;
             border-radius: 16px;
-            padding: 2rem;
+            overflow: hidden;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
             border: 1px solid #e2e8f0;
             cursor: pointer;
             transition: all 0.3s ease;
-            max-width: 500px;
-            width: 100%;
             position: relative;
-            overflow: hidden;
         }
 
         .lesson-card:hover {
@@ -71,11 +69,7 @@
         }
 
         .lesson-preview {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
             padding: 2rem;
-            margin-bottom: 1.5rem;
-            color: white;
             text-align: center;
             position: relative;
             min-height: 200px;
@@ -85,21 +79,14 @@
             align-items: center;
         }
 
-        .preview-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.9;
+        .preview-fundamentals {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
 
-        .preview-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .preview-subtitle {
-            font-size: 1rem;
-            opacity: 0.8;
+        .preview-llms {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
         }
 
         .floating-elements {
@@ -121,8 +108,25 @@
         .floating-icon:nth-child(3) { bottom: 25%; left: 20%; animation-delay: 2s; }
         .floating-icon:nth-child(4) { bottom: 15%; right: 15%; animation-delay: 3s; }
 
+        .preview-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .preview-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
         .lesson-content {
-            text-align: left;
+            padding: 2rem;
         }
 
         .lesson-title {
@@ -192,7 +196,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 1rem;
-            max-width: 400px;
+            max-width: 500px;
             margin: 1rem auto 0;
         }
 
@@ -232,8 +236,13 @@
                 font-size: 1.1rem;
             }
             
+            .lessons-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
             .lesson-card {
-                padding: 1.5rem;
+                min-width: auto;
             }
             
             .lesson-preview {
@@ -248,20 +257,6 @@
             .preview-title {
                 font-size: 1.3rem;
             }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .lesson-topics {
-                justify-content: center;
-            }
-            
-            .topic-tag {
-                font-size: 0.8rem;
-            }
         }
     </style>
 </head>
@@ -272,9 +267,10 @@
             <p>Aprende los conceptos fundamentales de IA de forma práctica e interactiva</p>
         </div>
 
-        <div class="lessons-container">
-            <div class="lesson-card" onclick="startLesson()">
-                <div class="lesson-preview">
+        <div class="lessons-grid">
+            <!-- Lección 1: Conceptos Fundamentales -->
+            <div class="lesson-card" onclick="startLesson('conceptos-fundamentales')">
+                <div class="lesson-preview preview-fundamentals">
                     <div class="floating-elements">
                         <div class="floating-icon">🤖</div>
                         <div class="floating-icon">🧠</div>
@@ -282,14 +278,14 @@
                         <div class="floating-icon">🎯</div>
                     </div>
                     <div class="preview-icon">🎯</div>
-                    <div class="preview-title">Conceptos Fundamentales</div>
+                    <div class="preview-title">Explora los Fundamentos de la IA</div>
                     <div class="preview-subtitle">IA • Machine Learning • Deep Learning</div>
                 </div>
                 
                 <div class="lesson-content">
-                    <h3 class="lesson-title">Explora los Fundamentos de la IA</h3>
+                    <h3 class="lesson-title">Conceptos Fundamentales</h3>
                     <p class="lesson-description">
-                        Descubre las diferencias entre Inteligencia Artificial, Machine Learning y Deep Learning a través de visualizaciones interactivas y ejemplos del mundo real.
+                        Descubre las diferencias entre Inteligencia Artificial, Machine Learning y Deep Learning a través de visualizaciones interactivas.
                     </p>
                     
                     <div class="lesson-topics">
@@ -303,13 +299,49 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Lección 2: Predicción de LLMs -->
+            <div class="lesson-card" onclick="startLesson('llm-prediccion')">
+                <div class="lesson-preview preview-llms">
+                    <div class="floating-elements">
+                        <div class="floating-icon">🧠</div>
+                        <div class="floating-icon">💭</div>
+                        <div class="floating-icon">📝</div>
+                        <div class="floating-icon">⚡</div>
+                    </div>
+                    <div class="preview-icon">🤖</div>
+                    <div class="preview-title">¿Cómo Funcionan los LLMs?</div>
+                    <div class="preview-subtitle">ChatGPT • Claude • Predicción Iterativa</div>
+                </div>
+                
+                <div class="lesson-content">
+                    <h3 class="lesson-title">Predicción Palabra por Palabra</h3>
+                    <p class="lesson-description">
+                        Observa en tiempo real cómo los modelos de lenguaje como ChatGPT y Claude construyen respuestas prediciendo una palabra a la vez.
+                    </p>
+                    
+                    <div class="lesson-topics">
+                        <span class="topic-tag">Predicción Iterativa</span>
+                        <span class="topic-tag">Probabilidades</span>
+                        <span class="topic-tag">Contexto</span>
+                    </div>
+                    
+                    <button class="lesson-cta">
+                        Ver Demostración →
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="stats">
-            <p>Lo que aprenderás en esta lección:</p>
+            <p>Lo que aprenderás en este curso:</p>
             <div class="stats-grid">
                 <div class="stat-item">
-                    <span class="stat-number">6</span>
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">Lecciones</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">6+</span>
                     <span class="stat-label">Conceptos</span>
                 </div>
                 <div class="stat-item">
@@ -325,18 +357,23 @@
     </div>
 
     <script>
-        function startLesson() {
-            // Redirect to the first application
-            window.location.href = 'conceptos-fundamentales.html';
+        function startLesson(lessonId) {
+            if (lessonId === 'conceptos-fundamentales') {
+                window.location.href = '1-conceptos-fundamentales.html';
+            } else if (lessonId === 'llm-prediccion') {
+                window.location.href = '2-llm-prediccion.html';
+            }
         }
 
         // Add hover effect
-        document.querySelector('.lesson-card').addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-6px)';
-        });
+        document.querySelectorAll('.lesson-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-6px)';
+            });
 
-        document.querySelector('.lesson-card').addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
         });
     </script>
 </body>
