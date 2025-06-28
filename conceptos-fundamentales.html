@@ -19,33 +19,6 @@
             overflow-x: hidden;
         }
 
-        .nav-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: #ED6237;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(237, 98, 55, 0.3);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-button:hover {
-            background: #d55531;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.4);
-        }
-
         .header {
             text-align: center;
             padding: 4rem 1rem 2rem;
@@ -53,7 +26,6 @@
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            position: relative;
         }
 
         .header h1 {
@@ -182,7 +154,7 @@
         }
 
         .label-ai { 
-            top: 50px; 
+            top: 80px; 
             right: -120px; 
             font-size: 1.1rem;
             padding: 12px 24px;
@@ -202,7 +174,7 @@
         }
         
         .label-ml { 
-            top: 180px; 
+            top: 200px; 
             right: -110px; 
             font-size: 1rem;
             padding: 10px 18px;
@@ -232,6 +204,7 @@
             border: 1px solid rgba(255,255,255,0.2);
             min-height: 200px;
             overflow: hidden;
+            margin-bottom: 2rem;
         }
 
         .info-content {
@@ -271,9 +244,9 @@
         .concept-analogy {
             background: linear-gradient(135deg, #ED6237, #f39c12);
             color: white;
-            padding: 1.5rem;
+            padding: 1.8rem;
             border-radius: 15px;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
             font-size: 1.1rem;
             line-height: 1.6;
             box-shadow: 0 8px 25px rgba(237, 98, 55, 0.2);
@@ -282,8 +255,8 @@
 
         .concept-analogy strong {
             display: block;
-            margin-bottom: 0.5rem;
-            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
         }
 
         .info-examples {
@@ -293,6 +266,12 @@
             border-left: 5px solid #ED6237;
         }
 
+        .info-examples h4 {
+            color: #ED6237;
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+        }
+
         .example-item {
             margin-bottom: 1rem;
             padding: 0.8rem;
@@ -300,6 +279,33 @@
             border-radius: 8px;
             border-left: 4px solid #667eea;
             font-size: 1rem;
+        }
+
+        .next-concept-btn {
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            width: auto;
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .next-concept-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
 
         .placeholder-message {
@@ -330,22 +336,6 @@
             background: #d55531;
             transform: translateY(-2px);
             box-shadow: 0 12px 35px rgba(237, 98, 55, 0.4);
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(237, 98, 55, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 20px rgba(237, 98, 55, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(237, 98, 55, 0);
-            }
         }
 
         @media (max-width: 1024px) {
@@ -379,7 +369,6 @@
             .label { font-size: 0.8rem; padding: 6px 12px; }
             .label-ai { font-size: 0.9rem; padding: 8px 16px; right: -80px; top: 50px; }
             .label-ml { right: -75px; top: 140px; }
-            .nav-button { font-size: 0.9rem; padding: 10px 20px; }
         }
 
         @media (max-width: 480px) {
@@ -445,16 +434,24 @@
                     <div class="example-item">🎮 <strong>Videojuegos:</strong> NPCs (Non-Player Characters - personajes no jugadores) que reaccionan a tus acciones de forma "inteligente"</div>
                     <div class="example-item">🏭 <strong>Automatización industrial:</strong> Robots que ensamblan carros, electrónicos y productos en fábricas</div>
                 </div>
+                
+                <button class="next-concept-btn" onclick="showConcept('ml')">
+                    Siguiente: Machine Learning →
+                </button>
             </div>
 
             <div class="info-content" id="info-ml">
                 <div class="info-title">📊 Machine Learning</div>
+                
                 <div class="info-description">
                     ML es un subcampo de la IA que permite a las máquinas aprender patrones en los datos y hacer predicciones sin ser programadas explícitamente para cada tarea. Utiliza algoritmos estadísticos para encontrar patrones y realizar predicciones basadas en datos históricos.
                 </div>
+
                 <div class="concept-analogy">
-                    💡 <strong>Piensa en Machine Learning como:</strong> Un niño que aprende a reconocer animales viendo miles de fotos. Al principio se confunde, pero con práctica mejora hasta poder identificar correctamente nuevos animales que nunca había visto.
+                    💡 <strong>Piensa en Machine Learning como:</strong> 
+                    Un niño que aprende a reconocer animales viendo miles de fotos. Al principio se confunde, pero con práctica mejora hasta poder identificar correctamente nuevos animales que nunca había visto.
                 </div>
+
                 <div class="info-examples">
                     <h4>Ejemplos que usas todos los días:</h4>
                     <div class="example-item">🎬 <strong>Netflix y YouTube:</strong> "Aprenden" qué te gusta para recomendarte contenido</div>
@@ -462,6 +459,10 @@
                     <div class="example-item">🛒 <strong>Amazon:</strong> "Si compraste esto, también te puede interesar..."</div>
                     <div class="example-item">🚫 <strong>Bancos:</strong> Detectan transacciones sospechosas aprendiendo de patrones</div>
                 </div>
+                
+                <button class="next-concept-btn" onclick="showConcept('dl')">
+                    Siguiente: Deep Learning →
+                </button>
             </div>
 
             <div class="info-content" id="info-dl">
@@ -492,25 +493,31 @@
         const infoContents = document.querySelectorAll('.info-content');
         const placeholder = document.querySelector('.placeholder-message');
 
+        function showConcept(concept) {
+            // Remove active class from all circles
+            circles.forEach(c => c.classList.remove('active', 'pulse'));
+            
+            // Find and activate the corresponding circle
+            const targetCircle = document.querySelector(`[data-concept="${concept}"]`);
+            if (targetCircle) {
+                targetCircle.classList.add('active');
+            }
+            
+            // Hide placeholder and all info contents
+            placeholder.style.display = 'none';
+            infoContents.forEach(content => content.classList.remove('active'));
+            
+            // Show corresponding info content
+            const targetInfo = document.getElementById(`info-${concept}`);
+            setTimeout(() => {
+                targetInfo.classList.add('active');
+            }, 150);
+        }
+
         circles.forEach(circle => {
             circle.addEventListener('click', () => {
-                // Remove active class from all circles
-                circles.forEach(c => c.classList.remove('active', 'pulse'));
-                
-                // Add active class to clicked circle
-                circle.classList.add('active');
-                
-                // Hide placeholder and all info contents
-                placeholder.style.display = 'none';
-                infoContents.forEach(content => content.classList.remove('active'));
-                
-                // Show corresponding info content
                 const concept = circle.dataset.concept;
-                const targetInfo = document.getElementById(`info-${concept}`);
-                
-                setTimeout(() => {
-                    targetInfo.classList.add('active');
-                }, 150);
+                showConcept(concept);
 
                 // Add click animation effect
                 circle.style.transform = 'scale(1.15)';
@@ -556,7 +563,6 @@
         document.head.appendChild(style);
 
         function nextLesson() {
-            // Here you would navigate to the next lesson
             window.location.href = 'algoritmos-ml.html';
         }
     </script>
