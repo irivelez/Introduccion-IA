@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de Algoritmos de Machine Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ED6237;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(237, 98, 55, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button:hover {
+            background: #d55531;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.4);
+        }
+
+        .header {
+            text-align: center;
+            padding: 4rem 1rem 2rem;
+            color: white;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: inline-block;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .instructions {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .algorithm-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-card {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            min-width: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .tab-card.active {
+            background: #ED6237;
+            color: white;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(237, 98, 55, 0.4);
+            border-color: #ED6237;
+        }
+
+        .tab-card.active .tab-icon {
+            transform: scale(1.1);
+        }
+
+        .tab-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ED6237, #f39c12);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tab-card.active::before {
+            transform: scaleX(1);
+        }
+
+        .tab-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .tab-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .tab-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .tab-card.active .tab-subtitle {
+            opacity: 0.9;
+        }
+
+        .content-section {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 0;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            min-height: 500px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .content-item {
+            padding: 2.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.4s ease;
+            position: absolute;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .content-item.active {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        .content-title {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+            border-bottom: 3px solid #ED6237;
+            padding-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-description {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+
+        .concept-analogy {
+            background: linear-gradient(135deg, #ED6237, #f39c12);
+            color: white;
+            padding: 1.8rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.2);
+            border-left: 5px solid #fff;
+        }
+
+        .concept-analogy strong {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .demo-visual {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            align-items: center;
+        }
+
+        .visual-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.8rem;
+            text-align: center;
+            border: 2px dashed #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .visual-box.input {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+        }
+
+        .visual-box.output {
+            border-color: #ED6237;
+            background: linear-gradient(135deg, #ED623720, #f39c1220);
+        }
+
+        .visual-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: #333;
+        }
+
+        .visual-examples {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .example-item-visual {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+
+        .arrow {
+            font-size: 2.5rem;
+            color: #ED6237;
+            font-weight: bold;
+        }
+
+        .info-examples {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            border-left: 5px solid #ED6237;
+            margin-top: 2rem;
+        }
+
+        .info-examples h4 {
+            color: #ED6237;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+        }
+
+        .example-item {
+            margin-bottom: 1.2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .placeholder-content {
+            text-align: center;
+            color: #666;
+            font-size: 1.3rem;
+            padding: 4rem 2rem;
+            line-height: 1.6;
+        }
+
+        .next-button {
+            background: #ED6237;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .next-button:hover {
+            background: #d55531;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(237, 98, 55, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.2rem; padding: 0.8rem 1.5rem; }
+            .header p { font-size: 1.1rem; }
+            
+            .algorithm-tabs {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.8rem;
+            }
+            
+            .tab-card {
+                min-width: 250px;
+            }
+            
+            .demo-visual {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-item {
+                padding: 1.8rem;
+            }
+            
+            .content-title {
+                font-size: 1.8rem;
+            }
+            
+            .tab-card {
+                min-width: 200px;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Tipos de Algoritmos de Machine Learning</h1>
+        <p>Descubre los tres enfoques principales para entrenar modelos de IA y cuándo usar cada uno</p>
+    </div>
+
+    <div class="instructions">
+        <p>🖱️ Selecciona un tipo de algoritmo para explorar cómo funciona</p>
+    </div>
+
+    <div class="main-container">
+        <div class="algorithm-tabs">
+            <div class="tab-card" data-algorithm="supervised">
+                <span class="tab-icon">🎯</span>
+                <div class="tab-title">Supervised Learning</div>
+                <div class="tab-subtitle">Aprendizaje Supervisado</div>
+            </div>
+
+            <div class="tab-card" data-algorithm="unsupervised">
+                <span class="tab-icon">🔍</span>
+                <div class="tab-title">Unsupervised Learning</div>
+                <div class="tab-subtitle">Aprendizaje No Supervisado</div>
+            </div>
+
+            <div class="tab-card" data-algorithm="reinforcement">
+                <span class="tab-icon">🎮</span>
+                <div class="tab-title">Reinforcement Learning</div>
+                <div class="tab-subtitle">Aprendizaje por Refuerzo</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="placeholder-content">
+                <p>👆 Selecciona un tipo de algoritmo arriba para descubrir:</p>
+                <p>• Cómo funciona paso a paso</p>
+                <p>• Analogías para entenderlo fácilmente</p>
+                <p>• Ejemplos del mundo real</p>
+                <p>• Aplicaciones que usas todos los días</p>
+            </div>
+
+            <div class="content-item" id="content-supervised">
+                <div class="content-title">🎯 Supervised Learning</div>
+                
+                <div class="content-description">
+                    El algoritmo aprende con ejemplos etiquetados, como un estudiante que practica con problemas que ya tienen las respuestas correctas. Después de ver miles de ejemplos, puede resolver problemas nuevos.
+                </div>
+
+                <div class="concept-analogy">
+                    💡 <strong>Piensa en Supervised Learning como:</strong> 
+                    Un profesor que te muestra problemas de matemáticas ya resueltos. Después de ver miles de ejemplos con sus soluciones, puedes resolver problemas nuevos que nunca habías visto antes.
+                </div>
+
+                <div class="demo-visual">
+                    <div class="visual-box input">
+                        <div class="visual-title">📥 INPUT (Datos + Etiquetas)</div>
+                        <div class="visual-examples">
+                            <div class="example-item-visual">📧 Email: "¡Gana dinero rápido!" → 🏷️ <strong>SPAM</strong></div>
+                            <div class="example-item-visual">📧 Email: "Reunión mañana 3pm" → 🏷️ <strong>NO SPAM</strong></div>
+                            <div class="example-item-visual">🖼️ Foto: Imagen de gato → 🏷️ <strong>GATO</strong></div>
+                            <div class="example-item-visual">🖼️ Foto: Imagen de perro → 🏷️ <strong>PERRO</strong></div>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="visual-box output">
+                        <div class="visual-title">📤 OUTPUT (Predicciones)</div>
+                        <div class="visual-examples">
+                            <div class="example-item-visual">📧 Nuevo email → 🤖 <strong>"Es SPAM"</strong></div>
+                            <div class="example-item-visual">🖼️ Nueva foto → 🤖 <strong>"Es un GATO"</strong></div>
+                            <div class="example-item-visual">🩺 Radiografía → 🤖 <strong>"Sin anomalías"</strong></div>
+                            <div class="example-item-visual">💰 Transacción → 🤖 <strong>"No es fraude"</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-examples">
+                    <h4>📱 Aplicaciones que usas todos los días:</h4>
+                    <div class="example-item">🎬 <strong>Netflix:</strong> Predice tu calificación de películas basándose en ratings anteriores de usuarios similares</div>
+                    <div class="example-item">📧 <strong>Gmail:</strong> Clasifica emails como spam usando millones de ejemplos etiquetados previamente</div>
+                    <div class="example-item">🛒 <strong>Amazon:</strong> Predice qué productos te pueden interesar basándose en compras anteriores</div>
+                    <div class="example-item">🏥 <strong>Medicina:</strong> Detecta enfermedades en imágenes médicas entrenado con casos diagnosticados</div>
+                </div>
+            </div>
+
+            <div class="content-item" id="content-unsupervised">
+                <div class="content-title">🔍 Unsupervised Learning</div>
+                
+                <div class="content-description">
+                    El algoritmo encuentra patrones ocultos en datos sin etiquetas, como un detective que busca pistas para resolver un misterio sin tener idea de qué está buscando al principio.
+                </div>
+
+                <div class="concept-analogy">
+                    💡 <strong>Piensa en Unsupervised Learning como:</strong> 
+                    Un antropólogo estudiando una cultura completamente desconocida. Sin guías ni manuales, debe observar comportamientos y descubrir patrones sociales por su cuenta.
+                </div>
+
+                <div class="demo-visual">
+                    <div class="visual-box input">
+                        <div class="visual-title">📥 INPUT (Solo Datos, Sin Etiquetas)</div>
+                        <div class="visual-examples">
+                            <div class="example-item-visual">👤 Cliente A: 25 años, compra tech, gasta $500/mes</div>
+                            <div class="example-item-visual">👤 Cliente B: 45 años, compra ropa, gasta $200/mes</div>
+                            <div class="example-item-visual">👤 Cliente C: 30 años, compra libros, gasta $100/mes</div>
+                            <div class="example-item-visual">👤 Cliente D: 50 años, compra jardín, gasta $300/mes</div>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="visual-box output">
+                        <div class="visual-title">📤 OUTPUT (Patrones Descubiertos)</div>
+                        <div class="visual-examples">
+                            <div class="example-item-visual">🏷️ <strong>Grupo 1:</strong> "Jóvenes Tech" (gastan mucho en tecnología)</div>
+                            <div class="example-item-visual">🏷️ <strong>Grupo 2:</strong> "Profesionales Maduros" (compras prácticas)</div>
+                            <div class="example-item-visual">🏷️ <strong>Grupo 3:</strong> "Intelectuales" (prefieren libros y cultura)</div>
+                            <div class="example-item-visual">🏷️ <strong>Grupo 4:</strong> "Entusiastas del Hogar" (jardín y casa)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-examples">
+                    <h4>🔬 Dónde se usa para descubrir lo desconocido:</h4>
+                    <div class="example-item">🛍️ <strong>Retail:</strong> Descubre segmentos de clientes naturales para crear estrategias de marketing personalizadas</div>
+                    <div class="example-item">🎵 <strong>Spotify:</strong> Agrupa canciones con características similares para crear playlists automáticas y géneros</div>
+                    <div class="example-item">🔍 <strong>Investigación:</strong> Identifica patrones inesperados en datos científicos y médicos complejos</div>
+                    <div class="example-item">💊 <strong>Farmacéutica:</strong> Encuentra nuevas relaciones entre genes, proteínas y enfermedades</div>
+                </div>
+            </div>
+
+            <div class="content-item" id="content-reinforcement">
+                <div class="content-title">🎮 Reinforcement Learning</div>
+                
+                <div class="content-description">
+                    El algoritmo aprende mediante prueba y error, recibiendo recompensas por acciones correctas y castigos por errores. Como entrenar a una mascota, mejora con la práctica y la retroalimentación.
+                </div>
+
+                <div class="concept-analogy">
+                    💡 <strong>Piensa en Reinforcement Learning como:</strong> 
+                    Entrenar a una mascota. No le explicas las reglas con palabras, sino que le das premios cuando hace algo bien y correcciones cuando se equivoca. Con el tiempo, aprende qué acciones le dan más recompensas.
+                </div>
+
+                <div class="demo-visual">
+                    <div class="visual-box input">
+                        <div class="visual-title">🎯 ENVIRONMENT (Entorno + Acciones)</div>
+                        <div class="visual-examples">
+                            <div class="example-item-visual">🎮 <strong>Estado:</strong> Tablero de juego actual / Situación de tráfico</div>
+                            <div class="example-item-visual">⚡ <strong>Acción:</strong> Mover pieza / Acelerar / Girar / Frenar</div>
+                            <div class="example-item-visual">🏆 <strong>Recompensa:</strong> +10 puntos por ganar / Llegar al destino</div>
+                            <div class="example-item-visual">❌ <strong>Castigo:</strong> -5 puntos por perder / Chocar</div>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="visual-box output">
+                        <div class="visual-title">🧠 LEARNING (Estrategia Mejorada)</div>
+                        <div class="visual-examples">
+                            <div class="example-item-visual">📈 <strong>Estrategia:</strong> "Esta acción me da más puntos"</div>
+                            <div class="example-item-visual">🎯 <strong>Política:</strong> "En esta situación, haré esto"</div>
+                            <div class="example-item-visual">🔄 <strong>Iteración:</strong> Prueba → Resultado → Ajuste → Repite</div>
+                            <div class="example-item-visual">🏅 <strong>Maestría:</strong> Estrategia óptima desarrollada</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-examples">
+                    <h4>🤖 Tecnologías que dominan a través de la práctica:</h4>
+                    <div class="example-item">🚗 <strong>Tesla Autopilot:</strong> Mejora la conducción autónoma con cada milla recorrida y situación enfrentada</div>
+                    <div class="example-item">🎯 <strong>Videojuegos:</strong> AlphaGo venció al campeón mundial de Go jugando millones de partidas contra sí mismo</div>
+                    <div class="example-item">💹 <strong>Trading:</strong> Algoritmos que aprenden estrategias de inversión óptimas mediante ensayo y error</div>
+                    <div class="example-item">🤖 <strong>Robótica:</strong> Robots que aprenden a caminar, manipular objetos y navegar por el mundo</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="next-button" onclick="nextLesson()">
+            Volver al Curso
+        </button>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab-card');
+        const contentItems = document.querySelectorAll('.content-item');
+        const placeholder = document.querySelector('.placeholder-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide placeholder and all content items
+                placeholder.style.display = 'none';
+                contentItems.forEach(content => content.classList.remove('active'));
+                
+                // Show corresponding content
+                const algorithm = tab.dataset.algorithm;
+                const targetContent = document.getElementById(`content-${algorithm}`);
+                
+                setTimeout(() => {
+                    targetContent.classList.add('active');
+                }, 150);
+
+                // Add click animation effect
+                tab.style.transform = 'translateY(-12px) scale(1.05)';
+                setTimeout(() => {
+                    tab.style.transform = '';
+                }, 300);
+            });
+
+            // Add hover effects
+            tab.addEventListener('mouseenter', () => {
+                if (!tab.classList.contains('active')) {
+                    tab.style.transform = 'translateY(-3px)';
+                }
+            });
+
+            tab.addEventListener('mouseleave', () => {
+                if (!tab.classList.contains('active')) {
+                    tab.style.transform = '';
+                }
+            });
+        });
+
+        // Add floating animation to tabs
+        tabs.forEach((tab, index) => {
+            const delay = index * 0.3;
+            tab.style.animation = `float 6s ease-in-out infinite ${delay}s`;
+        });
+
+        // CSS for floating animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-3px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function nextLesson() {
+            alert('Regresando al curso principal...\n\n(En tu implementación real, aquí redirigirias a la página principal del curso)');
+        }
+    </script>
+</body>
+</html>

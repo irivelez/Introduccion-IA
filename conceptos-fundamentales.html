@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conceptos Fundamentales: IA, ML y Deep Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ED6237;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(237, 98, 55, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button:hover {
+            background: #d55531;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.4);
+        }
+
+        .header {
+            text-align: center;
+            padding: 4rem 1rem 2rem;
+            color: white;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: inline-block;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .instructions {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .circles-section {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            text-align: center;
+            border: 3px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .circle.active {
+            transform: scale(1.08);
+            box-shadow: 0 25px 50px rgba(237, 98, 55, 0.4);
+            border-color: #ED6237;
+            border-width: 4px;
+        }
+
+        .ai-circle {
+            width: 500px;
+            height: 500px;
+            background: rgba(255,255,255,0.08);
+            color: white;
+            font-size: 1.6rem;
+            z-index: 1;
+        }
+
+        .ml-circle {
+            width: 320px;
+            height: 320px;
+            background: rgba(255,255,255,0.18);
+            color: white;
+            font-size: 1.3rem;
+            z-index: 2;
+        }
+
+        .dl-circle {
+            width: 160px;
+            height: 160px;
+            background: #ED6237;
+            color: white;
+            font-size: 1rem;
+            z-index: 3;
+            box-shadow: 0 15px 30px rgba(237, 98, 55, 0.4);
+        }
+
+        .labels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .label {
+            position: absolute;
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            pointer-events: none;
+            opacity: 0.95;
+            border: 2px solid rgba(255,255,255,0.3);
+            z-index: 15;
+        }
+
+        .label-ai { 
+            top: 50px; 
+            right: -120px; 
+            font-size: 1.1rem;
+            padding: 12px 24px;
+        }
+
+        .label-ai::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 8px 12px 8px 0;
+            border-color: transparent rgba(255,255,255,0.95) transparent transparent;
+        }
+        
+        .label-ml { 
+            top: 180px; 
+            right: -110px; 
+            font-size: 1rem;
+            padding: 10px 18px;
+        }
+
+        .label-ml::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 8px 12px 8px 0;
+            border-color: transparent rgba(255,255,255,0.95) transparent transparent;
+        }
+
+        .info-panel {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 0;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            min-height: 200px;
+            overflow: hidden;
+        }
+
+        .info-content {
+            padding: 2.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.4s ease;
+            position: absolute;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .info-content.active {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        .info-title {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+            border-bottom: 3px solid #ED6237;
+            padding-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-description {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+
+        .concept-analogy {
+            background: linear-gradient(135deg, #ED6237, #f39c12);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.2);
+            border-left: 5px solid #fff;
+        }
+
+        .concept-analogy strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .info-examples {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.8rem;
+            border-left: 5px solid #ED6237;
+        }
+
+        .example-item {
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            font-size: 1rem;
+        }
+
+        .placeholder-message {
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+            padding: 3rem;
+        }
+
+        .next-button {
+            background: #ED6237;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .next-button:hover {
+            background: #d55531;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(237, 98, 55, 0.4);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(237, 98, 55, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(237, 98, 55, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(237, 98, 55, 0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .circles-section {
+                width: 500px;
+                height: 500px;
+            }
+            
+            .ai-circle { width: 400px; height: 400px; font-size: 1.4rem; }
+            .ml-circle { width: 260px; height: 260px; font-size: 1.1rem; }
+            .dl-circle { width: 130px; height: 130px; font-size: 0.9rem; }
+            
+            .label { font-size: 0.9rem; padding: 8px 16px; }
+            .label-ai { font-size: 1rem; padding: 10px 20px; right: -100px; top: 60px; }
+            .label-ml { right: -90px; top: 170px; }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.2rem; padding: 0.8rem 1.5rem; }
+            .header p { font-size: 1.1rem; }
+            
+            .circles-section {
+                width: 400px;
+                height: 400px;
+            }
+            
+            .ai-circle { width: 320px; height: 320px; font-size: 1.2rem; }
+            .ml-circle { width: 210px; height: 210px; font-size: 1rem; }
+            .dl-circle { width: 105px; height: 105px; font-size: 0.8rem; }
+
+            .label { font-size: 0.8rem; padding: 6px 12px; }
+            .label-ai { font-size: 0.9rem; padding: 8px 16px; right: -80px; top: 50px; }
+            .label-ml { right: -75px; top: 140px; }
+            .nav-button { font-size: 0.9rem; padding: 10px 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .circles-section {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .ai-circle { width: 260px; height: 260px; font-size: 1rem; }
+            .ml-circle { width: 170px; height: 170px; font-size: 0.9rem; }
+            .dl-circle { width: 85px; height: 85px; font-size: 0.7rem; }
+
+            .label-ai { right: -70px; top: 40px; }
+            .label-ml { right: -65px; top: 115px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>IA vs Machine Learning vs Deep Learning</h1>
+        <p>Comprende las relaciones y diferencias entre estos tres conceptos fundamentales de la inteligencia artificial</p>
+    </div>
+
+    <div class="instructions">
+        <p>🖱️ Haz clic en cada círculo para explorar las diferencias</p>
+    </div>
+
+    <div class="main-container">
+        <div class="circles-section">
+            <div class="circle ai-circle pulse" data-concept="ai">
+                <span>Inteligencia<br>Artificial</span>
+            </div>
+            <div class="circle ml-circle" data-concept="ml">
+                <span>Machine<br>Learning</span>
+            </div>
+            <div class="circle dl-circle" data-concept="dl">
+                <span>Deep<br>Learning</span>
+            </div>
+
+            <div class="labels">
+                <div class="label label-ai">Inteligencia Artificial</div>
+                <div class="label label-ml">Machine Learning</div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="placeholder-message">
+                Selecciona un concepto arriba para ver su explicación detallada
+            </div>
+
+            <div class="info-content" id="info-ai">
+                <div class="info-title">🤖 Inteligencia Artificial</div>
+                <div class="info-description">
+                    La IA es el campo más amplio de la ciencia computacional que busca crear sistemas capaces de realizar tareas que tradicionalmente requieren inteligencia humana: razonamiento, aprendizaje, percepción y toma de decisiones.
+                </div>
+                <div class="concept-analogy">
+                    💡 <strong>Piensa en la Inteligencia Artificial como:</strong> Un paraguas gigante que cubre todas las formas de hacer que las máquinas "piensen" como humanos - desde seguir reglas programadas hasta aprender por sí mismas.
+                </div>
+                <div class="info-examples">
+                    <h4>¿Dónde la encuentras en tu día a día?</h4>
+                    <div class="example-item">🚗 <strong>GPS de tu auto:</strong> Calcula la mejor ruta usando algoritmos de búsqueda</div>
+                    <div class="example-item">🏥 <strong>Sistemas médicos:</strong> Ayudan a doctores con diagnósticos basados en síntomas</div>
+                    <div class="example-item">🎮 <strong>Videojuegos:</strong> NPCs (Non-Player Characters - personajes no jugadores) que reaccionan a tus acciones de forma "inteligente"</div>
+                    <div class="example-item">🏭 <strong>Automatización industrial:</strong> Robots que ensamblan carros, electrónicos y productos en fábricas</div>
+                </div>
+            </div>
+
+            <div class="info-content" id="info-ml">
+                <div class="info-title">📊 Machine Learning</div>
+                <div class="info-description">
+                    ML es un subcampo de la IA que permite a las máquinas aprender patrones en los datos y hacer predicciones sin ser programadas explícitamente para cada tarea. Utiliza algoritmos estadísticos para encontrar patrones y realizar predicciones basadas en datos históricos.
+                </div>
+                <div class="concept-analogy">
+                    💡 <strong>Piensa en Machine Learning como:</strong> Un niño que aprende a reconocer animales viendo miles de fotos. Al principio se confunde, pero con práctica mejora hasta poder identificar correctamente nuevos animales que nunca había visto.
+                </div>
+                <div class="info-examples">
+                    <h4>Ejemplos que usas todos los días:</h4>
+                    <div class="example-item">🎬 <strong>Netflix y YouTube:</strong> "Aprenden" qué te gusta para recomendarte contenido</div>
+                    <div class="example-item">📧 <strong>Gmail:</strong> Detecta automáticamente emails spam sin reglas programadas</div>
+                    <div class="example-item">🛒 <strong>Amazon:</strong> "Si compraste esto, también te puede interesar..."</div>
+                    <div class="example-item">🚫 <strong>Bancos:</strong> Detectan transacciones sospechosas aprendiendo de patrones</div>
+                </div>
+            </div>
+
+            <div class="info-content" id="info-dl">
+                <div class="info-title">🎯 Deep Learning</div>
+                <div class="info-description">
+                    Deep Learning es la técnica más avanzada de Machine Learning que usa "redes neuronales profundas" (muchas capas) para resolver problemas súper complejos, especialmente aquellos que involucran imágenes, texto y patrones muy sofisticados.
+                </div>
+                <div class="concept-analogy">
+                    💡 <strong>Piensa en Deep Learning como:</strong> Un detective experto que puede analizar miles de pistas microscópicas que un humano nunca notaría, conectando patrones súper complejos para resolver misterios que parecían imposibles.
+                </div>
+                <div class="info-examples">
+                    <h4>La magia detrás de la tecnología actual:</h4>
+                    <div class="example-item">🤖 <strong>ChatGPT y Claude:</strong> Entienden y generan texto como si fueran humanos</div>
+                    <div class="example-item">🎨 <strong>DALL-E y Midjourney:</strong> Crean imágenes increíbles solo con tu descripción</div>
+                    <div class="example-item">🚗 <strong>Tesla Autopilot:</strong> "Ve" la carretera y toma decisiones en tiempo real</div>
+                    <div class="example-item">📱 <strong>Face ID de iPhone:</strong> Reconoce tu cara incluso con cambios de luz o ángulo</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="next-button" onclick="nextLesson()">
+            Siguiente: Algoritmos de Aprendizaje →
+        </button>
+    </div>
+
+    <script>
+        const circles = document.querySelectorAll('.circle');
+        const infoContents = document.querySelectorAll('.info-content');
+        const placeholder = document.querySelector('.placeholder-message');
+
+        circles.forEach(circle => {
+            circle.addEventListener('click', () => {
+                // Remove active class from all circles
+                circles.forEach(c => c.classList.remove('active', 'pulse'));
+                
+                // Add active class to clicked circle
+                circle.classList.add('active');
+                
+                // Hide placeholder and all info contents
+                placeholder.style.display = 'none';
+                infoContents.forEach(content => content.classList.remove('active'));
+                
+                // Show corresponding info content
+                const concept = circle.dataset.concept;
+                const targetInfo = document.getElementById(`info-${concept}`);
+                
+                setTimeout(() => {
+                    targetInfo.classList.add('active');
+                }, 150);
+
+                // Add click animation effect
+                circle.style.transform = 'scale(1.15)';
+                setTimeout(() => {
+                    if (circle.classList.contains('active')) {
+                        circle.style.transform = 'scale(1.08)';
+                    } else {
+                        circle.style.transform = '';
+                    }
+                }, 200);
+            });
+
+            // Add hover effects
+            circle.addEventListener('mouseenter', () => {
+                if (!circle.classList.contains('active')) {
+                    circle.style.transform = 'scale(1.05)';
+                }
+            });
+
+            circle.addEventListener('mouseleave', () => {
+                if (!circle.classList.contains('active')) {
+                    circle.style.transform = '';
+                }
+            });
+        });
+
+        // Add floating animation to circles
+        circles.forEach((circle, index) => {
+            const delay = index * 0.7;
+            circle.style.animation = `float 8s ease-in-out infinite ${delay}s`;
+        });
+
+        // CSS for floating animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { transform: translateY(0px) rotate(0deg); }
+                25% { transform: translateY(-8px) rotate(0.5deg); }
+                50% { transform: translateY(0px) rotate(0deg); }
+                75% { transform: translateY(4px) rotate(-0.5deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function nextLesson() {
+            // Here you would navigate to the next lesson
+            window.location.href = 'algoritmos-ml.html';
+        }
+    </script>
+</body>
+</html>

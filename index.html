@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mathematical Beauty in Nature</title>
+    <title>Introducción a la Inteligencia Artificial</title>
     <style>
         * {
             margin: 0;
@@ -12,433 +12,332 @@
         }
 
         body {
-            background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .lessons-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
             overflow: hidden;
-            font-family: 'Arial', sans-serif;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #ED6237;
+        }
+
+        .lesson-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
             color: white;
+            text-align: center;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        canvas {
-            display: block;
-            cursor: crosshair;
+        .preview-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
         }
 
-        .controls {
+        .preview-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .floating-elements {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
         }
 
-        .control-group {
-            margin-bottom: 15px;
+        .floating-icon {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.2;
+            animation: float 4s ease-in-out infinite;
         }
 
-        .control-group label {
+        .floating-icon:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 20%; right: 20%; animation-delay: 1s; }
+        .floating-icon:nth-child(3) { bottom: 25%; left: 20%; animation-delay: 2s; }
+        .floating-icon:nth-child(4) { bottom: 15%; right: 15%; animation-delay: 3s; }
+
+        .lesson-content {
+            text-align: left;
+        }
+
+        .lesson-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+        }
+
+        .lesson-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .lesson-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+        }
+
+        .lesson-cta {
+            background: #ED6237;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .lesson-cta:hover {
+            background: #d55531;
+            transform: translateY(-1px);
+        }
+
+        .lesson-cta:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-top: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            max-width: 400px;
+            margin: 1rem auto 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ED6237;
             display: block;
-            margin-bottom: 5px;
-            font-size: 12px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #00ffff;
+            letter-spacing: 0.5px;
         }
 
-        .control-group select, .control-group input {
-            width: 150px;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 5px;
-            color: white;
-            font-size: 12px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
 
-        .info {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            max-width: 300px;
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 1.1rem;
+            }
+            
+            .lesson-card {
+                padding: 1.5rem;
+            }
+            
+            .lesson-preview {
+                padding: 1.5rem;
+                min-height: 160px;
+            }
+            
+            .preview-icon {
+                font-size: 2.5rem;
+            }
+            
+            .preview-title {
+                font-size: 1.3rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        .info h3 {
-            color: #00ffff;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .info p {
-            font-size: 11px;
-            line-height: 1.4;
-            color: #cccccc;
-        }
-
-        .title {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        @media (max-width: 480px) {
+            .lesson-topics {
+                justify-content: center;
+            }
+            
+            .topic-tag {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
-    
-    <div class="title">Mathematical Nature</div>
-    
-    <div class="controls">
-        <div class="control-group">
-            <label>Pattern</label>
-            <select id="patternSelect">
-                <option value="fibonacci">Fibonacci Spiral</option>
-                <option value="phyllotaxis">Phyllotaxis (Sunflower)</option>
-                <option value="fractal">Fractal Tree</option>
-                <option value="voronoi">Voronoi Cells</option>
-                <option value="wave">Wave Interference</option>
-                <option value="mandelbrot">Mandelbrot Set</option>
-            </select>
+    <div class="container">
+        <div class="header">
+            <h1>Introducción a la Inteligencia Artificial</h1>
+            <p>Aprende los conceptos fundamentales de IA de forma práctica e interactiva</p>
         </div>
-        
-        <div class="control-group">
-            <label>Animation Speed</label>
-            <input type="range" id="speedSlider" min="0.1" max="3" value="1" step="0.1">
+
+        <div class="lessons-container">
+            <div class="lesson-card" onclick="startLesson()">
+                <div class="lesson-preview">
+                    <div class="floating-elements">
+                        <div class="floating-icon">🤖</div>
+                        <div class="floating-icon">🧠</div>
+                        <div class="floating-icon">📊</div>
+                        <div class="floating-icon">🎯</div>
+                    </div>
+                    <div class="preview-icon">🎯</div>
+                    <div class="preview-title">Conceptos Fundamentales</div>
+                    <div class="preview-subtitle">IA • Machine Learning • Deep Learning</div>
+                </div>
+                
+                <div class="lesson-content">
+                    <h3 class="lesson-title">Explora los Fundamentos de la IA</h3>
+                    <p class="lesson-description">
+                        Descubre las diferencias entre Inteligencia Artificial, Machine Learning y Deep Learning a través de visualizaciones interactivas y ejemplos del mundo real.
+                    </p>
+                    
+                    <div class="lesson-topics">
+                        <span class="topic-tag">IA vs ML vs DL</span>
+                        <span class="topic-tag">Tipos de Algoritmos</span>
+                        <span class="topic-tag">Ejemplos Prácticos</span>
+                    </div>
+                    
+                    <button class="lesson-cta">
+                        Comenzar Lección →
+                    </button>
+                </div>
+            </div>
         </div>
-        
-        <div class="control-group">
-            <label>Complexity</label>
-            <input type="range" id="complexitySlider" min="50" max="2000" value="500" step="50">
+
+        <div class="stats">
+            <p>Lo que aprenderás en esta lección:</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Conceptos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">Algoritmos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">20+</span>
+                    <span class="stat-label">Ejemplos</span>
+                </div>
+            </div>
         </div>
-    </div>
-    
-    <div class="info" id="info">
-        <h3>Fibonacci Spiral</h3>
-        <p>The golden ratio (φ ≈ 1.618) appears throughout nature in spiral patterns. From nautilus shells to galaxy arms, this mathematical constant creates the most efficient packing and growth patterns in the natural world.</p>
     </div>
 
     <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const patternSelect = document.getElementById('patternSelect');
-        const speedSlider = document.getElementById('speedSlider');
-        const complexitySlider = document.getElementById('complexitySlider');
-        const info = document.getElementById('info');
-
-        let animationId;
-        let time = 0;
-        let mouseX = 0;
-        let mouseY = 0;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        function startLesson() {
+            // Redirect to the first application
+            window.location.href = 'conceptos-fundamentales.html';
         }
 
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        canvas.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+        // Add hover effect
+        document.querySelector('.lesson-card').addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-6px)';
         });
 
-        const patterns = {
-            fibonacci: {
-                name: "Fibonacci Spiral",
-                description: "The golden ratio (φ ≈ 1.618) appears throughout nature in spiral patterns. From nautilus shells to galaxy arms, this mathematical constant creates the most efficient packing and growth patterns in the natural world.",
-                draw: () => {
-                    const centerX = canvas.width / 2;
-                    const centerY = canvas.height / 2;
-                    const maxRadius = Math.min(canvas.width, canvas.height) * 0.4;
-                    const points = parseInt(complexitySlider.value);
-                    const phi = (1 + Math.sqrt(5)) / 2;
-                    
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
-                    for (let i = 0; i < points; i++) {
-                        const angle = i * (2 * Math.PI / (phi * phi)) + time * 0.5;
-                        const radius = Math.sqrt(i) * maxRadius / Math.sqrt(points);
-                        const x = centerX + radius * Math.cos(angle);
-                        const y = centerY + radius * Math.sin(angle);
-                        
-                        const hue = (i / points * 360 + time * 50) % 360;
-                        const size = 2 + Math.sin(time + i * 0.1) * 1;
-                        
-                        ctx.fillStyle = `hsl(${hue}, 80%, 60%)`;
-                        ctx.shadowBlur = 10;
-                        ctx.shadowColor = `hsl(${hue}, 80%, 60%)`;
-                        ctx.beginPath();
-                        ctx.arc(x, y, size, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
-            },
-            
-            phyllotaxis: {
-                name: "Phyllotaxis (Sunflower)",
-                description: "Sunflower seed patterns follow the golden angle (≈137.5°), creating the most efficient packing possible. This same pattern appears in pinecones, pineapples, and flower petals.",
-                draw: () => {
-                    const centerX = canvas.width / 2;
-                    const centerY = canvas.height / 2;
-                    const points = parseInt(complexitySlider.value);
-                    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-                    
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
-                    for (let i = 0; i < points; i++) {
-                        const angle = i * goldenAngle + time * 0.3;
-                        const radius = Math.sqrt(i) * 8;
-                        const x = centerX + radius * Math.cos(angle);
-                        const y = centerY + radius * Math.sin(angle);
-                        
-                        const hue = (i / points * 360 + time * 30) % 360;
-                        const size = 3 + Math.sin(time * 2 + i * 0.05) * 2;
-                        
-                        ctx.fillStyle = `hsl(${hue}, 70%, 50%)`;
-                        ctx.shadowBlur = 8;
-                        ctx.shadowColor = `hsl(${hue}, 70%, 50%)`;
-                        ctx.beginPath();
-                        ctx.arc(x, y, size, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
-            },
-            
-            fractal: {
-                name: "Fractal Tree",
-                description: "Trees, blood vessels, and lightning follow fractal patterns - structures that repeat at every scale. These patterns maximize surface area while minimizing energy expenditure.",
-                draw: () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
-                    function drawBranch(x, y, angle, length, depth) {
-                        if (depth === 0 || length < 2) return;
-                        
-                        const endX = x + length * Math.cos(angle);
-                        const endY = y + length * Math.sin(angle);
-                        
-                        const hue = (depth * 30 + time * 50) % 360;
-                        ctx.strokeStyle = `hsl(${hue}, 70%, ${50 + depth * 5}%)`;
-                        ctx.lineWidth = depth * 0.8;
-                        ctx.shadowBlur = 5;
-                        ctx.shadowColor = ctx.strokeStyle;
-                        
-                        ctx.beginPath();
-                        ctx.moveTo(x, y);
-                        ctx.lineTo(endX, endY);
-                        ctx.stroke();
-                        
-                        const angleOffset = Math.sin(time + depth) * 0.3;
-                        drawBranch(endX, endY, angle - 0.5 + angleOffset, length * 0.7, depth - 1);
-                        drawBranch(endX, endY, angle + 0.5 + angleOffset, length * 0.7, depth - 1);
-                    }
-                    
-                    const maxDepth = Math.floor(complexitySlider.value / 150);
-                    drawBranch(canvas.width / 2, canvas.height - 50, -Math.PI / 2, 150, maxDepth);
-                }
-            },
-            
-            voronoi: {
-                name: "Voronoi Cells",
-                description: "Cell division, giraffe patterns, and soap bubbles form Voronoi diagrams - the most efficient way to divide space. Each cell contains all points closest to its center.",
-                draw: () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
-                    const points = Math.floor(complexitySlider.value / 20);
-                    const cells = [];
-                    
-                    for (let i = 0; i < points; i++) {
-                        cells.push({
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height,
-                            hue: Math.random() * 360
-                        });
-                    }
-                    
-                    const imageData = ctx.createImageData(canvas.width, canvas.height);
-                    const data = imageData.data;
-                    
-                    for (let x = 0; x < canvas.width; x += 2) {
-                        for (let y = 0; y < canvas.height; y += 2) {
-                            let minDist = Infinity;
-                            let closestCell = null;
-                            
-                            for (let cell of cells) {
-                                const dist = Math.sqrt((x - cell.x) ** 2 + (y - cell.y) ** 2);
-                                if (dist < minDist) {
-                                    minDist = dist;
-                                    closestCell = cell;
-                                }
-                            }
-                            
-                            if (closestCell) {
-                                const hue = (closestCell.hue + time * 30) % 360;
-                                const intensity = Math.sin(time + minDist * 0.01) * 0.3 + 0.7;
-                                const rgb = hslToRgb(hue / 360, 0.7, intensity * 0.5);
-                                
-                                const index = (y * canvas.width + x) * 4;
-                                data[index] = rgb[0];
-                                data[index + 1] = rgb[1];
-                                data[index + 2] = rgb[2];
-                                data[index + 3] = 255;
-                            }
-                        }
-                    }
-                    
-                    ctx.putImageData(imageData, 0, 0);
-                }
-            },
-            
-            wave: {
-                name: "Wave Interference",
-                description: "Ocean waves, sound waves, and quantum mechanics all follow wave interference patterns. When waves meet, they create beautiful constructive and destructive interference patterns.",
-                draw: () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
-                    const sources = [
-                        { x: canvas.width * 0.3, y: canvas.height * 0.3 },
-                        { x: canvas.width * 0.7, y: canvas.height * 0.7 },
-                        { x: mouseX, y: mouseY }
-                    ];
-                    
-                    const imageData = ctx.createImageData(canvas.width, canvas.height);
-                    const data = imageData.data;
-                    
-                    for (let x = 0; x < canvas.width; x += 3) {
-                        for (let y = 0; y < canvas.height; y += 3) {
-                            let amplitude = 0;
-                            
-                            for (let source of sources) {
-                                const dist = Math.sqrt((x - source.x) ** 2 + (y - source.y) ** 2);
-                                const wave = Math.sin(dist * 0.05 - time * 3) / (1 + dist * 0.001);
-                                amplitude += wave;
-                            }
-                            
-                            const intensity = (amplitude + 1) / 2;
-                            const hue = (intensity * 240 + time * 50) % 360;
-                            const rgb = hslToRgb(hue / 360, 0.8, intensity * 0.6);
-                            
-                            const index = (y * canvas.width + x) * 4;
-                            data[index] = rgb[0];
-                            data[index + 1] = rgb[1];
-                            data[index + 2] = rgb[2];
-                            data[index + 3] = 255;
-                        }
-                    }
-                    
-                    ctx.putImageData(imageData, 0, 0);
-                }
-            },
-            
-            mandelbrot: {
-                name: "Mandelbrot Set",
-                description: "The Mandelbrot set reveals infinite complexity from a simple equation: z = z² + c. This fractal pattern shows how complex systems emerge from simple mathematical rules.",
-                draw: () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
-                    const imageData = ctx.createImageData(canvas.width, canvas.height);
-                    const data = imageData.data;
-                    
-                    const zoom = 1 + Math.sin(time * 0.5) * 0.8;
-                    const offsetX = Math.cos(time * 0.3) * 0.2;
-                    const offsetY = Math.sin(time * 0.2) * 0.2;
-                    
-                    for (let x = 0; x < canvas.width; x += 2) {
-                        for (let y = 0; y < canvas.height; y += 2) {
-                            const a = (x - canvas.width / 2) * zoom / (canvas.width / 4) + offsetX;
-                            const b = (y - canvas.height / 2) * zoom / (canvas.height / 4) + offsetY;
-                            
-                            let ca = a;
-                            let cb = b;
-                            let za = 0;
-                            let zb = 0;
-                            let n = 0;
-                            const maxIterations = 100;
-                            
-                            while (n < maxIterations && za * za + zb * zb < 4) {
-                                let temp = za * za - zb * zb + ca;
-                                zb = 2 * za * zb + cb;
-                                za = temp;
-                                n++;
-                            }
-                            
-                            const hue = (n / maxIterations * 360 + time * 100) % 360;
-                            const intensity = n < maxIterations ? n / maxIterations : 0;
-                            const rgb = hslToRgb(hue / 360, 0.8, intensity * 0.8);
-                            
-                            const index = (y * canvas.width + x) * 4;
-                            data[index] = rgb[0];
-                            data[index + 1] = rgb[1];
-                            data[index + 2] = rgb[2];
-                            data[index + 3] = 255;
-                        }
-                    }
-                    
-                    ctx.putImageData(imageData, 0, 0);
-                }
-            }
-        };
-
-        function hslToRgb(h, s, l) {
-            let r, g, b;
-            
-            if (s === 0) {
-                r = g = b = l;
-            } else {
-                const hue2rgb = (p, q, t) => {
-                    if (t < 0) t += 1;
-                    if (t > 1) t -= 1;
-                    if (t < 1/6) return p + (q - p) * 6 * t;
-                    if (t < 1/2) return q;
-                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-                    return p;
-                };
-                
-                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-                const p = 2 * l - q;
-                r = hue2rgb(p, q, h + 1/3);
-                g = hue2rgb(p, q, h);
-                b = hue2rgb(p, q, h - 1/3);
-            }
-            
-            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-        }
-
-        function updateInfo() {
-            const selectedPattern = patterns[patternSelect.value];
-            info.innerHTML = `
-                <h3>${selectedPattern.name}</h3>
-                <p>${selectedPattern.description}</p>
-            `;
-        }
-
-        function animate() {
-            time += parseFloat(speedSlider.value) * 0.02;
-            
-            const selectedPattern = patterns[patternSelect.value];
-            if (selectedPattern) {
-                selectedPattern.draw();
-            }
-            
-            animationId = requestAnimationFrame(animate);
-        }
-
-        patternSelect.addEventListener('change', updateInfo);
-        updateInfo();
-        animate();
+        document.querySelector('.lesson-card').addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
     </script>
 </body>
 </html>
