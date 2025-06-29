@@ -89,6 +89,11 @@
             color: white;
         }
 
+        .preview-timeline {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
         .floating-elements {
             position: absolute;
             width: 100%;
@@ -196,7 +201,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 1rem;
-            max-width: 500px;
+            max-width: 600px;
             margin: 1rem auto 0;
         }
 
@@ -331,26 +336,64 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Aplicación 3: Timeline de LLMs -->
+            <div class="lesson-card" onclick="startLesson('timeline-llms')">
+                <div class="lesson-preview preview-timeline">
+                    <div class="floating-elements">
+                        <div class="floating-icon">📅</div>
+                        <div class="floating-icon">🚀</div>
+                        <div class="floating-icon">🏆</div>
+                        <div class="floating-icon">🌟</div>
+                    </div>
+                    <div class="preview-icon">⏰</div>
+                    <div class="preview-title">La Evolución de los LLMs</div>
+                    <div class="preview-subtitle">2017-2025 • Historia Interactiva</div>
+                </div>
+                
+                <div class="lesson-content">
+                    <h3 class="lesson-title">Línea de Tiempo Interactiva</h3>
+                    <p class="lesson-description">
+                        Explora la fascinante historia de los modelos de lenguaje, desde el paper "Attention is All You Need" hasta DeepSeek R1 y las proyecciones futuras.
+                    </p>
+                    
+                    <div class="lesson-topics">
+                        <span class="topic-tag">Transformer</span>
+                        <span class="topic-tag">GPT Evolution</span>
+                        <span class="topic-tag">ChatGPT</span>
+                        <span class="topic-tag">Claude</span>
+                        <span class="topic-tag">DeepSeek</span>
+                    </div>
+                    
+                    <button class="lesson-cta">
+                        Explorar Timeline →
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="stats">
             <p>Lo que aprenderás en este curso:</p>
             <div class="stats-grid">
                 <div class="stat-item">
-                    <span class="stat-number">2</span>
-                    <span class="stat-label">Lecciones</span>
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">Aplicaciones</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">6+</span>
+                    <span class="stat-number">8+</span>
                     <span class="stat-label">Conceptos</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">3</span>
+                    <span class="stat-number">5</span>
                     <span class="stat-label">Algoritmos</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">20+</span>
+                    <span class="stat-number">30+</span>
                     <span class="stat-label">Ejemplos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Años de Historia</span>
                 </div>
             </div>
         </div>
@@ -362,6 +405,8 @@
                 window.location.href = '1-conceptos-fundamentales.html';
             } else if (lessonId === 'llm-prediccion') {
                 window.location.href = '2-llm-prediccion.html';
+            } else if (lessonId === 'timeline-llms') {
+                window.location.href = '3-timeline-llms.html';
             }
         }
 

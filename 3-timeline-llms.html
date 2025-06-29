@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Evolución de los LLMs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 40px 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 0 60px;
+            width: calc(50% - 60px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.6s ease;
+            position: relative;
+        }
+
+        .timeline-content.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border: 4px solid #667eea;
+            border-radius: 50%;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-marker:hover {
+            transform: translateX(-50%) scale(1.3);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .year {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .timeline-content h3 {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .timeline-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .highlight strong {
+            color: #2c3e50;
+        }
+
+        .model-image {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .transformer-diagram {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .transformer-diagram img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Glosario contextual */
+        .term {
+            position: relative;
+            color: #667eea;
+            font-weight: 600;
+            cursor: help;
+            border-bottom: 2px dotted #667eea;
+            text-decoration: none;
+        }
+
+        .term:hover {
+            color: #5a67d8;
+        }
+
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            white-space: nowrap;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            max-width: 300px;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #2c3e50;
+        }
+
+        .term:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .source-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .source-link:hover {
+            color: #5a67d8;
+            border-bottom-color: #5a67d8;
+        }
+            background: #e8f4fd;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .parameters strong {
+            color: #2c3e50;
+        }
+
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Botón de regreso al curso */
+        .course-return {
+            text-align: center;
+            margin: 60px 0 40px 0;
+        }
+
+        .return-btn {
+            background: linear-gradient(135deg, #ED6237, #e74c3c);
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+
+        .return-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .return-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(237, 98, 55, 0.4);
+            background: linear-gradient(135deg, #e74c3c, #ED6237);
+        }
+
+        .return-btn:hover::before {
+            left: 100%;
+        }
+
+        .return-btn:active {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(237, 98, 55, 0.3);
+        }
+
+        /* Responsive */
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                flex-direction: row !important;
+            }
+
+            .timeline-content {
+                width: calc(100% - 80px);
+                margin-left: 60px;
+                margin-right: 20px;
+            }
+
+            .timeline-marker {
+                left: 30px;
+            }
+
+            .year {
+                left: 30px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .return-btn {
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+
+            .impact-stats {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .transformer-diagram svg {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .timeline-content {
+                padding: 20px;
+                margin-left: 50px;
+                margin-right: 10px;
+                width: calc(100% - 60px);
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .timeline-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .return-btn {
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
+
+            .tooltip {
+                max-width: 250px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🤖 La Evolución de los LLMs</h1>
+            <p>Descubre cómo los Modelos de Lenguaje Grande han revolucionado la inteligencia artificial</p>
+        </header>
+
+        <div class="timeline">
+            <!-- 2017 - Transformers -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="year">2017</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>🎯 Nace la Arquitectura Transformer</h3>
+                    <p>Google publica el <span class="term">paper revolucionario<span class="tooltip">Paper científico que introdujo la arquitectura Transformer, base de todos los LLMs modernos</span></span> <a href="https://arxiv.org/abs/1706.03762" target="_blank">"Attention Is All You Need"</a>, presentando la arquitectura <span class="term">Transformer<span class="tooltip">Tipo de red neuronal que usa mecanismos de atención para procesar secuencias de texto de manera muy eficiente</span></span>.</p>
+                    
+                    <div class="transformer-diagram">
+                        <svg width="250" height="200" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Fondo principal -->
+                            <rect x="25" y="25" width="200" height="150" rx="15" fill="#f8f9fa" stroke="#667eea" stroke-width="3"/>
+                            
+                            <!-- Título -->
+                            <text x="125" y="45" text-anchor="middle" fill="#667eea" font-family="Arial" font-size="16" font-weight="bold">TRANSFORMER</text>
+                            
+                            <!-- Encoder (izquierda) -->
+                            <rect x="40" y="60" width="80" height="100" rx="8" fill="#e3f2fd" stroke="#4ecdc4" stroke-width="2"/>
+                            <text x="80" y="78" text-anchor="middle" fill="#2c3e50" font-family="Arial" font-size="10" font-weight="bold">ENCODER</text>
+                            
+                            <!-- Multi-Head Attention -->
+                            <rect x="45" y="85" width="70" height="18" rx="3" fill="#4ecdc4"/>
+                            <text x="80" y="96" text-anchor="middle" fill="white" font-family="Arial" font-size="8">Multi-Head Attention</text>
+                            
+                            <!-- Add & Norm -->
+                            <rect x="45" y="108" width="70" height="12" rx="3" fill="#45b7d1"/>
+                            <text x="80" y="116" text-anchor="middle" fill="white" font-family="Arial" font-size="7">Add & Norm</text>
+                            
+                            <!-- Feed Forward -->
+                            <rect x="45" y="125" width="70" height="18" rx="3" fill="#96ceb4"/>
+                            <text x="80" y="136" text-anchor="middle" fill="white" font-family="Arial" font-size="8">Feed Forward</text>
+                            
+                            <!-- Add & Norm 2 -->
+                            <rect x="45" y="148" width="70" height="12" rx="3" fill="#45b7d1"/>
+                            <text x="80" y="156" text-anchor="middle" fill="white" font-family="Arial" font-size="7">Add & Norm</text>
+                            
+                            <!-- Decoder (derecha) -->
+                            <rect x="130" y="60" width="80" height="100" rx="8" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+                            <text x="170" y="78" text-anchor="middle" fill="#2c3e50" font-family="Arial" font-size="10" font-weight="bold">DECODER</text>
+                            
+                            <!-- Masked Multi-Head Attention -->
+                            <rect x="135" y="85" width="70" height="18" rx="3" fill="#ff9800"/>
+                            <text x="170" y="96" text-anchor="middle" fill="white" font-family="Arial" font-size="7">Masked Attention</text>
+                            
+                            <!-- Cross Attention -->
+                            <rect x="135" y="108" width="70" height="18" rx="3" fill="#f39c12"/>
+                            <text x="170" y="119" text-anchor="middle" fill="white" font-family="Arial" font-size="7">Cross Attention</text>
+                            
+                            <!-- Feed Forward Decoder -->
+                            <rect x="135" y="131" width="70" height="18" rx="3" fill="#e67e22"/>
+                            <text x="170" y="142" text-anchor="middle" fill="white" font-family="Arial" font-size="8">Feed Forward</text>
+                            
+                            <!-- Flecha de conexión -->
+                            <path d="M 120 110 L 130 110" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                            
+                            <!-- Definir flecha -->
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#667eea"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: #666; text-align: center;">Arquitectura que cambió todo</p>
+                    </div>
+                    
+                    <div class="highlight">
+                        <strong>🚀 El gran avance:</strong> Los Transformers pueden procesar texto en paralelo (no palabra por palabra), haciéndolos mucho más rápidos y eficientes que los modelos anteriores.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2018 - GPT-1 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="year">2018</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>🌱 GPT-1: El Primer Experimento</h3>
+                    <p><a href="https://openai.com/research/language-unsupervised" target="_blank">OpenAI lanza GPT-1</a>, el primer modelo de la familia GPT (<span class="term">Generative Pre-trained Transformer<span class="tooltip">Tipo de modelo de IA que puede generar texto coherente después de ser entrenado con grandes cantidades de texto</span></span>).</p>
+                    
+                    <div class="parameters">
+                        <strong>📊 Especificaciones:</strong> 117 millones de <span class="term">parámetros<span class="tooltip">Valores numéricos que el modelo ajusta durante el entrenamiento para "aprender" patrones en el texto</span></span>
+                    </div>
+                    
+                    <p>Aunque pequeño comparado con los estándares actuales, GPT-1 demostró que los Transformers podían generar texto coherente y realizar tareas básicas de comprensión de lenguaje.</p>
+                </div>
+            </div>
+
+            <!-- 2019 - GPT-2 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="year">2019</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>📈 GPT-2: El Salto Cuántico</h3>
+                    <p><a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf" target="_blank">OpenAI presenta GPT-2</a>, marcando el primer gran salto en escala y capacidades.</p>
+                    
+                    <div class="parameters">
+                        <strong>📊 Especificaciones:</strong> 1.5 mil millones de parámetros<br>
+                        <strong>🚀 Crecimiento:</strong> <span style="color: #e74c3c;">13x más grande</span> que GPT-1
+                    </div>
+                    
+                    <div class="highlight">
+                        <strong>🎯 Momento histórico:</strong> OpenAI inicialmente consideró GPT-2 "demasiado peligroso" para liberarlo completamente, demostrando por primera vez el potencial disruptivo de los LLMs.
+                    </div>
+                    
+                    <p>GPT-2 podía escribir artículos coherentes, completar historias y realizar tareas de escritura creativa con una calidad sorprendente para la época.</p>
+                </div>
+            </div>
+
+            <!-- 2020 - GPT-3 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="year">2020</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>🎨 GPT-3: La Creatividad Artificial</h3>
+                    <p><a href="https://arxiv.org/abs/2005.14165" target="_blank">OpenAI lanza GPT-3</a>, llevando la generación de texto a un nivel completamente nuevo.</p>
+                    
+                    <div class="parameters">
+                        <strong>📊 Especificaciones:</strong> 175 mil millones de parámetros<br>
+                        <strong>🚀 Crecimiento:</strong> <span style="color: #e74c3c;">117x más grande</span> que GPT-2
+                    </div>
+                    
+                    <div class="highlight">
+                        <strong>🎭 Capacidades emergentes:</strong> GPT-3 comenzó a mostrar habilidades que no fueron programadas explícitamente: escribir código, resolver problemas matemáticos básicos, crear poesía, e incluso demostrar algo parecido al "razonamiento".
+                    </div>
+                    
+                    <p>Este modelo marcó el inicio de la era de los <span class="term">"few-shot learning"<span class="tooltip">Capacidad de aprender nuevas tareas con solo unos pocos ejemplos, sin necesidad de entrenar específicamente para esa tarea</span></span>, donde el modelo podía realizar tareas nuevas con solo unos pocos ejemplos.</p>
+                </div>
+            </div>
+
+            <!-- 2022 - ChatGPT -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="year">2022</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>🌍 ChatGPT: La Revolución Global</h3>
+                    <p>El 30 de noviembre de 2022, <a href="https://openai.com/index/chatgpt/" target="_blank">OpenAI lanza ChatGPT</a> y cambia el mundo para siempre.</p>
+                    
+                    <div class="impact-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">100M</div>
+                            <div class="stat-label">Usuarios en 2 meses</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">1M</div>
+                            <div class="stat-label">Usuarios en 5 días</div>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <strong>🎯 El momento que lo cambió todo:</strong> ChatGPT se convirtió en la aplicación de más rápido crecimiento en la historia, superando a TikTok, Instagram y todos los récords anteriores.
+                    </div>
+                    
+                    <p>Basado en GPT-3.5 con <span class="term">RLHF<span class="tooltip">Reinforcement Learning from Human Feedback - técnica que entrena al modelo usando retroalimentación humana para hacer respuestas más útiles y seguras</span></span>, ChatGPT hizo que la IA conversacional fuera accesible para el público general, iniciando la era de la IA generativa mainstream.</p>
+                </div>
+            </div>
+
+            <!-- 2023 - Claude y Llama -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="year">2023</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>🌐 Claude, Llama y la Carrera de la IA</h3>
+                    <p>En marzo, <a href="https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback" target="_blank">Anthropic lanza Claude</a>, el primer LLM entrenado con <a href="https://arxiv.org/abs/2212.08073" target="_blank"><span class="term">Constitutional AI<span class="tooltip">Método revolucionario que entrena IA para ser segura usando principios éticos escritos, como una "constitución"</span></span></a>. Paralelamente, <a href="https://arxiv.org/abs/2302.13971" target="_blank">Meta lanza Llama</a> (febrero) y <a href="https://arxiv.org/abs/2307.09288" target="_blank">Llama 2</a> (julio), mientras Google presenta Bard.</p>
+                    
+                    <div class="parameters">
+                        <strong>🤖 Claude:</strong> Primer modelo con "constitución ética" - principios de ser útil, honesto y seguro<br>
+                        <strong>📊 Llama 1:</strong> Hasta 65 mil millones de parámetros (solo para investigadores)<br>
+                        <strong>📊 Llama 2:</strong> Hasta 70 mil millones de parámetros (completamente <span class="term">open source<span class="tooltip">Código abierto que permite que cualquiera use, modifique y distribuya el software</span></span>)
+                    </div>
+                    
+                    <div class="highlight">
+                        <strong>🎯 El enfoque diferencial de Claude:</strong> Anthropic introduce el <span class="term">Constitutional AI<span class="tooltip">Entrenamiento basado en principios éticos explícitos, inspirado en la Declaración Universal de DDHH</span></span> - en lugar de depender solo de feedback humano, Claude sigue una "constitución" de principios éticos. Esto permite mayor seguridad, transparencia y alineación con valores humanos.
+                    </div>
+                    
+                    <p>2023 marca el año donde los LLMs pasaron de ser una curiosidad tecnológica a herramientas esenciales en educación, trabajo, creatividad y vida cotidiana, con diferentes enfoques: Claude enfocado en seguridad, Llama en democratización, y una competencia feroz entre gigantes tecnológicos.</p>
+                </div>
+            </div>
+
+            <!-- 2024 - DeepSeek y China -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="year">2024</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>🐉 China Entra al Juego: DeepSeek</h3>
+                    <p>DeepSeek, una startup china, lanza <span class="term">DeepSeek-V2<span class="tooltip">Modelo chino que demostró eficiencia extrema en el entrenamiento</span></span> (mayo) y <span class="term">DeepSeek-V3<span class="tooltip">Modelo de 671 mil millones de parámetros con arquitectura mixture-of-experts</span></span> (diciembre), demostrando que se pueden crear LLMs de clase mundial con una fracción del costo.</p>
+                    
+                    <div class="parameters">
+                        <strong>📊 DeepSeek-V3:</strong> 671 mil millones de parámetros<br>
+                        <strong>💰 Costo de entrenamiento:</strong> <span style="color: #e74c3c;">Solo $6 millones</span> vs $100 millones de GPT-4<br>
+                        <strong>⚡ Eficiencia:</strong> 10x menos poder computacional que Llama 3.1
+                    </div>
+                    
+                    <div class="highlight">
+                        <strong>🚀 El momento que sorprendió al mundo:</strong> DeepSeek demostró que las sanciones tecnológicas pueden convertirse en catalizadores de innovación, creando modelos que rivalizan con los mejores occidentales a costos drasticamente menores. Ver <a href="https://blueberrymarkets.com/market-analysis/deepseeks-disruption-of-global-financial-markets-what-you-need-to-know/" target="_blank">análisis del impacto en mercados financieros</a>.
+                    </div>
+                    
+                    <p>También surge <a href="https://arxiv.org/abs/2407.21783" target="_blank"><span class="term">Llama 3<span class="tooltip">Tercera generación de Llama con mejoras significativas en razonamiento</span></span></a> (abril) y <span class="term">Llama 3.1<span class="tooltip">Incluye una versión de 405 mil millones de parámetros</span></span> (julio) de Meta, consolidando la competencia global en IA.</p>
+                </div>
+            </div>
+
+            <!-- 2025 - DeepSeek R1 y el presente -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="year">2025</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>🎯 DeepSeek R1 Sacude el Mundo</h3>
+                    <p>En enero, DeepSeek lanza <span class="term">DeepSeek-R1<span class="tooltip">Modelo de razonamiento que compite directamente con OpenAI o1</span></span>, un modelo de <span class="term">razonamiento<span class="tooltip">Tipo de modelo que puede "pensar" paso a paso antes de responder</span></span> que rivaliza con OpenAI o1 y se convierte en #1 en App Store, superando incluso a ChatGPT.</p>
+                    
+                    <div class="impact-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">#1</div>
+                            <div class="stat-label">App Store global</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">-1T$</div>
+                            <div class="stat-label">Caída bursátil en Wall Street</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">MIT</div>
+                            <div class="stat-label">Licencia open source</div>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <strong>🌍 Cambio de paradigma:</strong> <a href="https://blueberrymarkets.com/market-analysis/deepseeks-disruption-of-global-financial-markets-what-you-need-to-know/" target="_blank">DeepSeek R1 demostró que la innovación en IA ya no es monopolio de Silicon Valley</a>. Empresas tecnológicas globales perdieron $1 billón en capitalización de mercado en un solo día.
+                    </div>
+                    
+                    <p>Paralelamente, emergen <span class="term">modelos especializados<span class="tooltip">LLMs entrenados para industrias específicas como medicina, finanzas o educación</span></span> para industrias específicas, <span class="term">agentes autónomos<span class="tooltip">IA que puede realizar tareas complejas de forma independiente</span></span> que pueden actuar de forma independiente, y una carrera hacia modelos más eficientes y <span class="term">multimodales<span class="tooltip">Que procesan texto, imagen, audio y video simultáneamente</span></span>.</p>
+                </div>
+            </div>
+
+            <!-- Futuro próximo 2025-2026 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="year">2025-26</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>🔮 El Futuro Próximo: Hacia la AGI</h3>
+                    <p>Los expertos predicen avances revolucionarios que nos acercan a la <span class="term">Inteligencia Artificial General<span class="tooltip">IA que puede realizar cualquier tarea intelectual que un humano puede hacer</span></span> (AGI).</p>
+                    
+                    <div class="highlight">
+                        <strong>🎯 Tendencias emergentes para 2025-2026:</strong>
+                        <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+                            <li><strong>Agentes AI autónomos:</strong> IA que gestiona tareas complejas sin supervisión humana</li>
+                            <li><strong>Modelos ultra-eficientes:</strong> Rendimiento superior con menor consumo energético</li>
+                            <li><strong>IA multimodal avanzada:</strong> Procesamiento perfecto de texto, voz, imagen y video</li>
+                            <li><strong>IA especializada por industria:</strong> Modelos específicos para medicina, finanzas, educación</li>
+                            <li><strong>Integración ubicua:</strong> IA integrada en cada aplicación y dispositivo</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="parameters">
+                        <strong>📈 Proyecciones:</strong><br>
+                        • <a href="https://technologymagazine.com/articles/gartner-how-agentic-ai-is-shaping-business-decision-making" target="_blank">33% de apps empresariales tendrán agentes autónomos en 2028 (Gartner)</a><br>
+                        • <a href="https://www.weforum.org/stories/2025/05/ai-agents-select-the-right-agent/" target="_blank">$300+ mil millones en inversión global en IA</a><br>
+                        • <a href="https://www.pwc.com/us/en/tech-effect/ai-analytics/ai-predictions.html" target="_blank">Mejoras de 50% en tiempo de desarrollo con IA (PwC)</a><br>
+                        • <a href="https://aibusiness.com/automation/agentic-ai-set-to-rise-with-new-cybersecurity-risks-gartner" target="_blank">15% de decisiones diarias serán autónomas (Gartner 2028)</a>
+                    </div>
+                    
+                    <p>Estamos en el momento perfecto para aprender y adoptar estas tecnologías que están transformando cada aspecto de nuestras vidas profesionales y personales. <strong>La próxima década será definida por quién mejor sepa colaborar con la IA.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón de regreso al curso -->
+        <div class="course-return">
+            <button class="return-btn" onclick="alert('Regresando al curso...')">
+                ← Volver al curso
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Animación de aparición de elementos
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, observerOptions);
+
+        // Observar todos los contenidos de la timeline
+        document.querySelectorAll('.timeline-content').forEach(content => {
+            observer.observe(content);
+        });
+
+        // Efecto hover en los marcadores
+        document.querySelectorAll('.timeline-marker').forEach(marker => {
+            marker.addEventListener('mouseenter', () => {
+                marker.style.transform = 'translateX(-50%) scale(1.3)';
+                marker.style.boxShadow = '0 0 20px rgba(102, 126, 234, 0.5)';
+            });
+            
+            marker.addEventListener('mouseleave', () => {
+                marker.style.transform = 'translateX(-50%) scale(1)';
+                marker.style.boxShadow = 'none';
+            });
+        });
+
+        // Efecto de parallax suave en el scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.timeline::before');
+            if (parallax) {
+                const speed = scrolled * 0.1;
+                parallax.style.transform = `translateX(-50%) translateY(${speed}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
