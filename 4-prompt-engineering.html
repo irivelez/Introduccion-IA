@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering Interactivo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .techniques-section {
+            margin-bottom: 40px;
+        }
+
+        .techniques-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .technique-card {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            border: 3px solid transparent;
+        }
+
+        .technique-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #ED6237;
+        }
+
+        .technique-card.active {
+            border-color: #667eea;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .technique-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            position: relative;
+        }
+
+        .technique-card.active .technique-header {
+            background: linear-gradient(135deg, #ED6237, #e74c3c);
+        }
+
+        .difficulty-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .technique-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .technique-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .technique-description {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            line-height: 1.5;
+        }
+
+        .technique-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .technique-card.active .technique-content {
+            display: block;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .prompt-example {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #dc3545;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .prompt-example.good {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        }
+
+        .prompt-example.bad {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+        }
+
+        .example-label {
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+        }
+
+        .example-text {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            white-space: pre-line;
+        }
+
+        .example-output {
+            background: rgba(255,255,255,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .example-output h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .example-metrics {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .metric {
+            background: rgba(255,255,255,0.8);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .metric.good {
+            color: #155724;
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .metric.bad {
+            color: #721c24;
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .best-practices {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .best-practices h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .practices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .practice-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            border-top: 4px solid #667eea;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #ED6237);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .practice-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .practice-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #495057;
+        }
+
+        .quick-tips {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .quick-tips h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .tip-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tip-item strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #ED6237, #e74c3c);
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.3);
+            margin: 30px auto;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(237, 98, 55, 0.4);
+        }
+
+        .back-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .techniques-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .practices-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .technique-header,
+            .technique-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎯 Prompt Engineering Interactivo</h1>
+            <p>Domina el arte de comunicarte efectivamente con los modelos de IA a través de ejemplos reales y comparaciones prácticas.</p>
+        </header>
+
+        <!-- Técnicas Principales con Ejemplos -->
+        <div class="techniques-section">
+            <div class="techniques-grid">
+                <!-- Zero-Shot Prompting -->
+                <div class="technique-card" onclick="toggleTechnique('zero-shot')" id="zero-shot">
+                    <div class="technique-header">
+                        <div class="difficulty-badge">Básico</div>
+                        <div class="technique-title">
+                            🎯 Zero-Shot Prompting
+                        </div>
+                        <div class="technique-subtitle">Instrucciones directas sin ejemplos</div>
+                        <div class="technique-description">
+                            Proporciona solo la descripción de la tarea. Ideal para tareas simples donde el modelo ya entiende el dominio.
+                        </div>
+                    </div>
+                    <div class="technique-content">
+                        <div class="comparison-container">
+                            <div class="prompt-example bad">
+                                <div class="example-label">❌ Prompt Débil</div>
+                                <div class="example-text">"Traduce esto"</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>❓ Respuesta confusa o solicita más información</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric bad">Ambiguo</span>
+                                    <span class="metric bad">Incompleto</span>
+                                </div>
+                            </div>
+                            <div class="prompt-example good">
+                                <div class="example-label">✅ Prompt Efectivo</div>
+                                <div class="example-text">"Traduce la siguiente frase del español al inglés: 'Buenos días, ¿cómo está usted?'"</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>✨ "Good morning, how are you?"</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric good">Específico</span>
+                                    <span class="metric good">Claro</span>
+                                    <span class="metric good">Directo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Few-Shot Prompting -->
+                <div class="technique-card" onclick="toggleTechnique('few-shot')" id="few-shot">
+                    <div class="technique-header">
+                        <div class="difficulty-badge">Básico</div>
+                        <div class="technique-title">
+                            📚 Few-Shot Prompting
+                        </div>
+                        <div class="technique-subtitle">Aprendizaje por ejemplos</div>
+                        <div class="technique-description">
+                            Incluye 2-5 ejemplos para mostrar el patrón deseado. Mejora dramáticamente la precisión del modelo.
+                        </div>
+                    </div>
+                    <div class="technique-content">
+                        <div class="comparison-container">
+                            <div class="prompt-example bad">
+                                <div class="example-label">❌ Sin Ejemplos</div>
+                                <div class="example-text">"Clasifica el sentimiento de: 'El producto llegó roto pero el servicio al cliente fue excelente'"</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>😕 "Positivo" o "Negativo" - Respuesta confusa para sentimientos mixtos</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric bad">Impreciso</span>
+                                    <span class="metric bad">Binario</span>
+                                </div>
+                            </div>
+                            <div class="prompt-example good">
+                                <div class="example-label">✅ Con Ejemplos</div>
+                                <div class="example-text">Clasifica el sentimiento:
+
+Ejemplo 1: "Excelente producto" → Positivo
+Ejemplo 2: "Terrible experiencia" → Negativo  
+Ejemplo 3: "Buena calidad pero caro" → Mixto
+
+Clasifica: "El producto llegó roto pero el servicio al cliente fue excelente"</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>✨ "Mixto - El producto tiene problemas (roto) pero el servicio fue positivo (excelente). Aspectos negativos: calidad del producto. Aspectos positivos: atención al cliente."</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric good">Preciso</span>
+                                    <span class="metric good">Matizado</span>
+                                    <span class="metric good">Aprende patrón</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chain-of-Thought -->
+                <div class="technique-card" onclick="toggleTechnique('chain-of-thought')" id="chain-of-thought">
+                    <div class="technique-header">
+                        <div class="difficulty-badge">Intermedio</div>
+                        <div class="technique-title">
+                            🧠 Chain-of-Thought
+                        </div>
+                        <div class="technique-subtitle">Razonamiento paso a paso</div>
+                        <div class="technique-description">
+                            Guía al modelo para que muestre su razonamiento. Esencial para problemas complejos y matemáticos.
+                        </div>
+                    </div>
+                    <div class="technique-content">
+                        <div class="comparison-container">
+                            <div class="prompt-example bad">
+                                <div class="example-label">❌ Directo</div>
+                                <div class="example-text">"Si una tienda tiene 40% de descuento en un producto de $150 y luego 20% adicional, ¿cuál es el precio final?"</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>😕 "$72" - Respuesta sin mostrar cálculos, posible error</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric bad">Sin razonamiento</span>
+                                    <span class="metric bad">Posible error</span>
+                                </div>
+                            </div>
+                            <div class="prompt-example good">
+                                <div class="example-label">✅ Chain-of-Thought</div>
+                                <div class="example-text">Resuelve paso a paso:
+                                
+Si una tienda tiene 40% de descuento en un producto de $150 y luego 20% adicional, ¿cuál es el precio final?
+
+Piensa paso a paso:
+1. Identifica el precio original
+2. Calcula el primer descuento
+3. Calcula el segundo descuento sobre el precio ya rebajado
+4. Determina el precio final</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>✨ 
+                                    1. Precio original: $150<br>
+                                    2. Primer descuento (40%): $150 × 0.40 = $60<br>
+                                    &nbsp;&nbsp;&nbsp;Precio después del primer descuento: $150 - $60 = $90<br>
+                                    3. Segundo descuento (20% sobre $90): $90 × 0.20 = $18<br>
+                                    &nbsp;&nbsp;&nbsp;Precio después del segundo descuento: $90 - $18 = $72<br>
+                                    4. Precio final: $72
+                                    </p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric good">Razonamiento claro</span>
+                                    <span class="metric good">Verificable</span>
+                                    <span class="metric good">Educativo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role-Playing -->
+                <div class="technique-card" onclick="toggleTechnique('role-playing')" id="role-playing">
+                    <div class="technique-header">
+                        <div class="difficulty-badge">Intermedio</div>
+                        <div class="technique-title">
+                            🎭 Role-Playing
+                        </div>
+                        <div class="technique-subtitle">Asignación de personalidad experta</div>
+                        <div class="technique-description">
+                            El modelo adopta un rol específico para obtener respuestas más especializadas y contextualmente relevantes.
+                        </div>
+                    </div>
+                    <div class="technique-content">
+                        <div class="comparison-container">
+                            <div class="prompt-example bad">
+                                <div class="example-label">❌ Sin Rol</div>
+                                <div class="example-text">"¿Cómo mejoro mi estrategia de marketing digital?"</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>😕 Consejos genéricos y superficiales sobre redes sociales y contenido</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric bad">Genérico</span>
+                                    <span class="metric bad">Superficial</span>
+                                </div>
+                            </div>
+                            <div class="prompt-example good">
+                                <div class="example-label">✅ Con Rol Específico</div>
+                                <div class="example-text">Actúa como un consultor senior en marketing digital con 10 años de experiencia ayudando a PYMEs. 
+
+Un cliente te pregunta cómo mejorar su estrategia de marketing digital para una tienda online de ropa. 
+
+Proporciona una estrategia específica y actionable.</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>✨ Como consultor senior en marketing digital, aquí mi estrategia para tu tienda de ropa online:
+
+                                    <br><br><strong>AUDITORÍA Y OPTIMIZACIÓN SEO:</strong>
+                                    <br>• Optimiza títulos de productos con palabras clave long-tail
+                                    <br>• Mejora velocidad del sitio (objetivo: <3 segundos)
+                                    <br>• Implementa esquemas de datos para productos
+
+                                    <br><br><strong>SEGMENTACIÓN DE AUDIENCIA:</strong>
+                                    <br>• Segment 1: Mujeres 25-35 años, estilo casual-profesional
+                                    <br>• Segment 2: Jóvenes 18-24 años, tendencias fast-fashion
+                                    <br>• Retargeting para carritos abandonados
+
+                                    <br><br><strong>CONTENIDO ESTACIONAL:</strong>
+                                    <br>• Enero-Febrero: Looks de oficina post-fiestas
+                                    <br>• Marzo-Mayo: Colección primavera/verano
+                                    <br>• Septiembre-Noviembre: Back-to-work y otoño
+
+                                    <br><br><strong>MÉTRICAS KPI:</strong>
+                                    <br>• Tasa de conversión objetivo: 2.5-3.5%
+                                    <br>• Valor promedio del pedido: incremento 15%
+                                    <br>• Costo por adquisición <$25
+
+                                    <br><br><strong>PRESUPUESTO MENSUAL:</strong>
+                                    <br>• Facebook/Instagram Ads: $800
+                                    <br>• Google Ads: $600
+                                    <br>• Influencer marketing: $400
+                                    <br>• Email marketing: $100
+
+                                    <br><br><strong>TIMELINE:</strong>
+                                    <br>• Semana 1-2: Auditoría y configuración
+                                    <br>• Semana 3-4: Lanzamiento campañas
+                                    <br>• Mes 2-3: Optimización basada en datos</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric good">Específico</span>
+                                    <span class="metric good">Experto</span>
+                                    <span class="metric good">Actionable</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Self-Consistency -->
+                <div class="technique-card" onclick="toggleTechnique('self-consistency')" id="self-consistency">
+                    <div class="technique-header">
+                        <div class="difficulty-badge">Avanzado</div>
+                        <div class="technique-title">
+                            🔄 Self-Consistency
+                        </div>
+                        <div class="technique-subtitle">Múltiples caminos de razonamiento</div>
+                        <div class="technique-description">
+                            Genera múltiples soluciones y elige la más consistente. Ideal para problemas donde la precisión es crítica.
+                        </div>
+                    </div>
+                    <div class="technique-content">
+                        <div class="comparison-container">
+                            <div class="prompt-example bad">
+                                <div class="example-label">❌ Una Sola Respuesta</div>
+                                <div class="example-text">"Una empresa reduce su personal en 25%. Si tenía 120 empleados, ¿cuántos tiene ahora?"</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>😕 "95 empleados" - Error potencial sin verificación</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric bad">Sin verificación</span>
+                                    <span class="metric bad">Propenso a errores</span>
+                                </div>
+                            </div>
+                            <div class="prompt-example good">
+                                <div class="example-label">✅ Self-Consistency</div>
+                                <div class="example-text">Una empresa reduce su personal en 25%. Si tenía 120 empleados, ¿cuántos tiene ahora?
+
+Resuelve esto de 3 maneras diferentes:
+1. Calculando la reducción directamente
+2. Calculando el porcentaje que permanece
+3. Usando proporciones
+
+Luego compara los resultados para verificar la respuesta correcta.</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>✨ 
+                                    <strong>Método 1 - Reducción directa:</strong><br>
+                                    25% de 120 empleados = 0.25 × 120 = 30 empleados despedidos<br>
+                                    Empleados restantes: 120 - 30 = 90 empleados<br><br>
+                                    
+                                    <strong>Método 2 - Porcentaje que permanece:</strong><br>
+                                    Si despiden 25%, permanece 75%<br>
+                                    75% de 120 = 0.75 × 120 = 90 empleados<br><br>
+                                    
+                                    <strong>Método 3 - Proporciones:</strong><br>
+                                    120 empleados = 100%<br>
+                                    X empleados = 75% (100% - 25%)<br>
+                                    X = (120 × 75) ÷ 100 = 90 empleados<br><br>
+                                    
+                                    <strong>✅ Los 3 métodos confirman: 90 empleados restantes</strong>
+                                    </p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric good">Verificado</span>
+                                    <span class="metric good">Múltiples métodos</span>
+                                    <span class="metric good">Confiable</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tree-of-Thoughts -->
+                <div class="technique-card" onclick="toggleTechnique('tree-of-thoughts')" id="tree-of-thoughts">
+                    <div class="technique-header">
+                        <div class="difficulty-badge">Avanzado</div>
+                        <div class="technique-title">
+                            🌳 Tree-of-Thoughts
+                        </div>
+                        <div class="technique-subtitle">Exploración de múltiples ramas</div>
+                        <div class="technique-description">
+                            Explora sistemáticamente diferentes enfoques como un árbol de decisiones. Para problemas complejos con múltiples soluciones.
+                        </div>
+                    </div>
+                    <div class="technique-content">
+                        <div class="comparison-container">
+                            <div class="prompt-example bad">
+                                <div class="example-label">❌ Enfoque Linear</div>
+                                <div class="example-text">"¿Cómo puedo aumentar las ventas de mi restaurante?"</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>😕 Lista simple de sugerencias generales sin análisis profundo de opciones</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric bad">Superficial</span>
+                                    <span class="metric bad">Sin análisis</span>
+                                </div>
+                            </div>
+                            <div class="prompt-example good">
+                                <div class="example-label">✅ Tree-of-Thoughts</div>
+                                <div class="example-text">Ayúdame a aumentar las ventas de mi restaurante. 
+
+Explora estas 3 ramas principales:
+
+<strong>RAMA 1: Mejorar experiencia del cliente</strong>
+- Evalúa: servicio, ambiente, calidad
+- Pros/contras de cada mejora
+- Costo vs impacto
+
+<strong>RAMA 2: Estrategias de marketing</strong>
+- Evalúa: digital, tradicional, boca a boca
+- Presupuesto necesario para cada
+- ROI esperado
+
+<strong>RAMA 3: Optimización operativa</strong>
+- Evalúa: menú, precios, horarios
+- Análisis de competencia
+- Implementación gradual
+
+Para cada rama, dame tu recomendación final.</div>
+                                <div class="example-output">
+                                    <h4>Resultado:</h4>
+                                    <p>✨ <strong>ANÁLISIS TREE-OF-THOUGHTS:</strong>
+
+                                    <br><br><strong>RAMA 1: Experiencia del Cliente</strong>
+                                    <br><strong>Evaluación:</strong>
+                                    <br>• Servicio: Capacitar personal (+), costo moderado (-)
+                                    <br>• Ambiente: Renovar decoración (+), inversión alta (-)
+                                    <br>• Calidad: Mejorar ingredientes (+), aumenta costos (-)
+                                    <br><strong>Costo vs Impacto:</strong> Medio/Alto
+                                    <br><strong>ROI esperado:</strong> 15-25% incremento en 6 meses
+
+                                    <br><br><strong>RAMA 2: Marketing</strong>
+                                    <br><strong>Digital:</strong> Instagram/TikTok (+), requiere constancia (-)
+                                    <br><strong>Tradicional:</strong> Radio local (+), difícil medir ROI (-)
+                                    <br><strong>Boca a boca:</strong> Programa referidos (+), crecimiento lento (-)
+                                    <br><strong>Presupuesto:</strong> $500-2000/mes según canal
+                                    <br><strong>ROI esperado:</strong> 20-40% nuevos clientes
+
+                                    <br><br><strong>RAMA 3: Optimización Operativa</strong>
+                                    <br><strong>Menú:</strong> Platos populares (+), eliminar poco vendidos (+)
+                                    <br><strong>Precios:</strong> Análisis competencia, ajuste estratégico
+                                    <br><strong>Horarios:</strong> Extender fines de semana (+), costos laborales (-)
+                                    <br><strong>Implementación:</strong> Inmediata, bajo costo
+
+                                    <br><br><strong>🎯 RECOMENDACIÓN FINAL:</strong>
+                                    <br><strong>1. Prioridad ALTA:</strong> Rama 3 (optimización) - implementar inmediatamente
+                                    <br><strong>2. Prioridad MEDIA:</strong> Rama 2 (marketing digital) - iniciar en paralelo
+                                    <br><strong>3. Prioridad BAJA:</strong> Rama 1 (renovaciones) - planificar para siguiente trimestre
+
+                                    <br><br><strong>Justificación:</strong> Optimización operativa ofrece ROI inmediato con menor inversión, mientras marketing digital construye base de clientes futura.</p>
+                                </div>
+                                <div class="example-metrics">
+                                    <span class="metric good">Sistemático</span>
+                                    <span class="metric good">Análisis profundo</span>
+                                    <span class="metric good">Estratégico</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mejores Prácticas -->
+        <div class="best-practices">
+            <h2>💡 Principios Fundamentales</h2>
+            <div class="practices-grid">
+                <div class="practice-card">
+                    <div class="practice-title">
+                        🎯 Especificidad es Clave
+                    </div>
+                    <div class="practice-text">
+                        Cuanto más específico seas, mejores resultados obtienes. "Traduce esto" vs "Traduce del español al inglés formal"
+                    </div>
+                </div>
+
+                <div class="practice-card">
+                    <div class="practice-title">
+                        📋 Define el Formato
+                    </div>
+                    <div class="practice-text">
+                        Especifica cómo quieres la respuesta: lista numerada, párrafos, tabla, JSON, etc. El formato importa tanto como el contenido.
+                    </div>
+                </div>
+
+                <div class="practice-card">
+                    <div class="practice-title">
+                        🎭 Usa Roles Específicos
+                    </div>
+                    <div class="practice-text">
+                        "Actúa como un [experto específico]" produce respuestas más relevantes que preguntas genéricas.
+                    </div>
+                </div>
+
+                <div class="practice-card">
+                    <div class="practice-title">
+                        📚 Ejemplos son Poderosos
+                    </div>
+                    <div class="practice-text">
+                        2-3 ejemplos bien elegidos pueden ser más efectivos que páginas de instrucciones detalladas.
+                    </div>
+                </div>
+
+                <div class="practice-card">
+                    <div class="practice-title">
+                        🔄 Itera y Refina
+                    </div>
+                    <div class="practice-text">
+                        El primer prompt rara vez es perfecto. Experimenta, ajusta y mejora basándote en los resultados obtenidos.
+                    </div>
+                </div>
+
+                <div class="practice-card">
+                    <div class="practice-title">
+                        🧠 Guía el Razonamiento
+                    </div>
+                    <div class="practice-text">
+                        Para problemas complejos, pide al modelo que "piense paso a paso" o muestre su razonamiento antes de la respuesta final.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Rápidos -->
+        <div class="quick-tips">
+            <h3>⚡ Tips Rápidos para Mejores Prompts</h3>
+            <div class="tips-grid">
+                <div class="tip-item">
+                    <strong>🎯 Contexto Primero</strong>
+                    Proporciona toda la información relevante antes de hacer la pregunta
+                </div>
+                <div class="tip-item">
+                    <strong>📏 Controla la Longitud</strong>
+                    Especifica si quieres respuestas cortas, detalladas o de longitud específica
+                </div>
+                <div class="tip-item">
+                    <strong>🚫 Evita Negaciones</strong>
+                    Di lo que QUIERES, no lo que NO quieres. Es más claro y efectivo
+                </div>
+                <div class="tip-item">
+                    <strong>🔢 Usa Delimitadores</strong>
+                    Separa secciones con """, ---, ### para mayor claridad y estructura
+                </div>
+                <div class="tip-item">
+                    <strong>📊 Pide Verificación</strong>
+                    Para información importante, pide al modelo que cite fuentes o muestre confianza
+                </div>
+                <div class="tip-item">
+                    <strong>⏰ Considera el Tiempo</strong>
+                    Menciona si necesitas información actual o específica de cierta época
+                </div>
+            </div>
+        </div>
+
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            ← Volver al curso
+        </button>
+    </div>
+
+    <script>
+        function toggleTechnique(techniqueId) {
+            const card = document.getElementById(techniqueId);
+            const allCards = document.querySelectorAll('.technique-card');
+            
+            // Si la tarjeta ya está activa, la cerramos
+            if (card.classList.contains('active')) {
+                card.classList.remove('active');
+                return;
+            }
+            
+            // Cerramos todas las demás tarjetas
+            allCards.forEach(c => c.classList.remove('active'));
+            
+            // Abrimos la tarjeta seleccionada
+            card.classList.add('active');
+            
+            // Scroll suave hacia la tarjeta
+            setTimeout(() => {
+                card.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }, 100);
+        }
+
+        // Cerrar tarjetas al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.technique-card')) {
+                document.querySelectorAll('.technique-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+            }
+        });
+
+        // Prevenir que el click en el contenido cierre la tarjeta
+        document.querySelectorAll('.technique-content').forEach(content => {
+            content.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+
+        // Animación de entrada para las tarjetas
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observar tarjetas para animación de entrada
+        document.querySelectorAll('.technique-card, .practice-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Efecto de hover mejorado para las tarjetas de práctica - REMOVIDO
+        // Las tarjetas de práctica ya no tienen hover para evitar confusión
+    </script>
+</body>
+</html>
