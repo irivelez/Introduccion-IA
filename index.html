@@ -441,13 +441,13 @@
     <script>
         function startLesson(lessonId) {
             if (lessonId === 'conceptos-fundamentales') {
-                alert('Redirigiendo a: 1-conceptos-fundamentales.html');
+                window.location.href = '1-conceptos-fundamentales.html';
             } else if (lessonId === 'llm-prediccion') {
-                alert('Redirigiendo a: 2-llm-prediccion.html');
+                window.location.href = '2-llm-prediccion.html';
             } else if (lessonId === 'timeline-llms') {
-                alert('Redirigiendo a: 3-timeline-llms.html');
+                window.location.href = '3-timeline-llms.html';
             } else if (lessonId === 'prompt-engineering') {
-                alert('Redirigiendo a: 4-prompt-engineering.html');
+                window.location.href = '4-prompt-engineering.html';
             }
         }
 
@@ -459,22 +459,6 @@
 
             card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
-            });
-        });
-
-        // Añadir efectos visuales adicionales
-        document.addEventListener('DOMContentLoaded', function() {
-            // Animación de entrada para las cards
-            const cards = document.querySelectorAll('.lesson-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 200);
             });
         });
     </script>
