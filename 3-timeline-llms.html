@@ -234,6 +234,8 @@
             color: #5a67d8;
             border-bottom-color: #5a67d8;
         }
+
+        .parameters {
             background: #e8f4fd;
             padding: 10px 15px;
             border-radius: 8px;
@@ -271,55 +273,31 @@
             opacity: 0.9;
         }
 
-        /* Botón de regreso al curso */
-        .course-return {
+        .completion-note {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: #0f172a;
+            border: 2px solid #0ea5e9;
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
             text-align: center;
             margin: 60px 0 40px 0;
-        }
-
-        .return-btn {
-            background: linear-gradient(135deg, #ED6237, #e74c3c);
-            color: white;
-            border: none;
-            padding: 18px 36px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            box-shadow: 0 8px 25px rgba(237, 98, 55, 0.3);
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.1);
             position: relative;
             overflow: hidden;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
         }
 
-        .return-btn::before {
+        .completion-note::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #0284c7);
         }
 
-        .return-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 35px rgba(237, 98, 55, 0.4);
-            background: linear-gradient(135deg, #e74c3c, #ED6237);
-        }
-
-        .return-btn:hover::before {
-            left: 100%;
-        }
-
-        .return-btn:active {
-            transform: translateY(-1px) scale(1.02);
-            box-shadow: 0 6px 20px rgba(237, 98, 55, 0.3);
-        }
-
-        /* Responsive */
         /* Responsive */
         @media (max-width: 768px) {
             .timeline::before {
@@ -349,11 +327,6 @@
             }
 
             .header p {
-                font-size: 1rem;
-            }
-
-            .return-btn {
-                padding: 15px 30px;
                 font-size: 1rem;
             }
 
@@ -390,11 +363,6 @@
 
             .timeline-content h3 {
                 font-size: 1.2rem;
-            }
-
-            .return-btn {
-                padding: 12px 24px;
-                font-size: 0.9rem;
             }
 
             .tooltip {
@@ -684,11 +652,8 @@
             </div>
         </div>
 
-        <!-- Botón de regreso al curso -->
-        <div class="course-return">
-            <button class="return-btn" onclick="alert('Regresando al curso...')">
-                ← Volver al curso
-            </button>
+        <div class="completion-note">
+            💡 <strong>Para continuar:</strong> Cierra esta pestaña y regresa a la plataforma del curso para seguir con la siguiente lección.
         </div>
     </div>
 
