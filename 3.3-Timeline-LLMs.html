@@ -20,9 +20,9 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 95vw;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 40px 2.5vw;
         }
 
         .header {
@@ -83,7 +83,7 @@
 
         .timeline {
             position: relative;
-            max-width: 900px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -174,7 +174,7 @@
 
         .timeline-content {
             position: relative;
-            width: 45%;
+            width: 47%;
             background: rgba(255,255,255,0.95);
             padding: 30px;
             border-radius: 15px;
@@ -323,6 +323,16 @@
             transform: translateX(-50%);
             border: 5px solid transparent;
             border-top-color: #2c3e50;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                padding: 30px 3vw;
+            }
+            
+            .timeline {
+                max-width: 100%;
+            }
         }
 
         @media (max-width: 768px) {
