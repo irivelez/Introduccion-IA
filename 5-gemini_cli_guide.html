@@ -3,303 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini CLI Installation Guide</title>
+    <title>Guía Rápida de Gemini CLI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            line-height: 1.6;
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --card-background: #ffffff;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --border-radius: 15px;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
-            color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color), #0056b3);
+            border-radius: var(--border-radius);
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .lang-toggle {
             display: flex;
             justify-content: center;
+            margin-bottom: 3rem;
         }
-        .container {
-            max-width: 800px;
-            margin: 20px;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-        .lang-switcher {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        .lang-switcher button {
-            background-color: #e0e0e0;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+
+        .lang-toggle button {
+            background: var(--card-background);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
         }
-        .lang-switcher button:hover {
-            background-color: #d0d0d0;
+
+        .lang-toggle button:first-child {
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
         }
-        .lang-switcher button.active {
-            background-color: #007bff;
+
+        .lang-toggle button:last-child {
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
+            border-left: none;
+        }
+
+        .lang-toggle button.active,
+        .lang-toggle button:hover {
+            background: var(--primary-color);
             color: white;
         }
-        h1, h2, h3 {
-            color: #0056b3;
-            border-bottom: 2px solid #eef;
-            padding-bottom: 10px;
+
+        .content-section {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
         }
-        h1 {
-            text-align: center;
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #e9ecef;
         }
+        
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p, ul, ol {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+        
+        strong {
+            font-weight: 600;
+        }
+
         pre {
             background-color: #2d2d2d;
             color: #f8f8f2;
-            padding: 15px;
-            border-radius: 5px;
+            padding: 1.5rem;
+            border-radius: 10px;
             overflow-x: auto;
             position: relative;
-        }
-        code {
+            margin: 1.5rem 0;
             font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.95rem;
         }
+
         .copy-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #555;
+            top: 10px;
+            right: 10px;
+            background: #444;
             color: white;
             border: none;
-            padding: 5px 8px;
-            border-radius: 3px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 5px;
             cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
         }
+
         .copy-btn:hover {
-            background: #777;
+            background: #555;
         }
+        
         .note {
-            background-color: #fffbe6;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 5px 5px 0;
+            background-color: #e7f3fe;
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
         }
-        .step {
-            margin-bottom: 25px;
+
+        .note p {
+            margin-bottom: 0;
         }
+
         .hidden {
             display: none;
         }
-        .output {
+        
+        .example-output {
             background-color: #f0f0f0;
             border: 1px solid #ddd;
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 5px;
-            color: #555;
+            padding: 1rem 1.5rem;
+            margin-top: 1rem;
+            border-radius: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
         }
-        .output strong {
-            color: #333;
-        }
-        strong.os-tag {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            color: white;
-            font-size: 0.9em;
-        }
-        .windows { background-color: #0078d4; }
-        .macos { background-color: #555; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="lang-switcher">
+        <header class="header">
+            <h1 id="header-title">Quickstart with Gemini CLI</h1>
+            <p id="header-subtitle">Your AI-powered assistant, right in your computer's terminal.</p>
+        </header>
+
+        <div class="lang-toggle">
             <button id="btn-en" class="active" onclick="switchLang('en')">English</button>
             <button id="btn-es" onclick="switchLang('es')">Español</button>
         </div>
 
-        <!-- English Content -->
         <div id="content-en">
-            <h1>Welcome to the Gemini CLI Guide!</h1>
-            <p>This guide will walk you through installing and using the Gemini Command Line Interface (CLI). Think of the CLI as a way to chat with the Gemini AI directly from a text-based window on your computer. It's powerful, fast, and easier to set up than you think!</p>
+            <section class="content-section">
+                <h2>First... What is a "CLI"?</h2>
+                <p>Imagine you could talk to your computer by typing commands instead of clicking buttons. That's a Command Line Interface (CLI). It's a powerful and fast way for developers (and you!) to get things done. The Gemini CLI brings Google's powerful AI directly to that text-based interface.</p>
+            </section>
 
-            <h2>Part 1: Installation</h2>
-            <p>Before we can use Gemini, we need to install it. This requires a program called Python. Let's go step-by-step.</p>
+            <section class="content-section">
+                <h2>Installation</h2>
+                <p>Let's get Gemini CLI set up on your computer. It’s a simple process using <strong>npm</strong>, a tool that helps install software like this.</p>
 
-            <div class="step">
-                <h3>Step 1: Get the Command Window (Terminal)</h3>
-                <p>This is the special window where we'll type our commands.</p>
-                <ul>
-                    <li><strong class="os-tag windows">Windows:</strong> Press the Windows key, type <code>cmd</code> or <code>PowerShell</code>, and press Enter.</li>
-                    <li><strong class="os-tag macos">macOS:</strong> Open Finder, go to Applications → Utilities, and double-click on <strong>Terminal</strong>.</li>
-                </ul>
-            </div>
+                <h3>1. Open Your Terminal</h3>
+                <p>This is the app where you'll type your commands.
+                    <ul>
+                        <li><strong>On macOS:</strong> Open "Terminal" (you can find it in Applications → Utilities).</li>
+                        <li><strong>On Windows:</strong> Open "PowerShell" (search for it in the Start Menu).</li>
+                    </ul>
+                </p>
 
-            <div class="step">
-                <h3>Step 2: Check for Python</h3>
-                <p>The Gemini CLI is a Python package, so you need Python installed. Let's see if you have it. Type this command in your terminal and press Enter:</p>
-                <pre><code id="code1">python --version</code><button class="copy-btn" onclick="copyToClipboard('code1')">Copy</button></pre>
+                <h3>2. Install Gemini CLI</h3>
+                <p>Copy the command below, paste it into your terminal, and press Enter. This will download and install the Gemini CLI package.</p>
+                <pre><code id="code-install-en">npm install -g @google/gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code-install-en')">Copy</button></pre>
+
+                <h3>3. Log In to Your Google Account</h3>
+                <p>After installation, type <code>gemini</code> and press Enter. The CLI will guide you to log in with your Google account in your web browser. This is a one-time setup to connect the CLI to your account.</p>
+                <pre><code id="code-login-en">gemini</code><button class="copy-btn" onclick="copyToClipboard('code-login-en')">Copy</button></pre>
+
                 <div class="note">
-                    <strong>Note:</strong> On some systems, especially macOS and Linux, you might need to use <code>python3</code> instead of <code>python</code>. If the command above gives an error, try: <code>python3 --version</code>.
+                    <p><strong>That's it!</strong> You're ready to go. The next sections show you what you can do.</p>
                 </div>
-                <p>If you see a version number (e.g., "Python 3.9.1"), great! You can skip to Step 4. If not, don't worry—let's install it.</p>
-            </div>
+            </section>
+            
+            <section class="content-section">
+                <h2>Awesome Examples</h2>
+                <p>Here are a few ways you can start using Gemini CLI right away.</p>
 
-            <div class="step">
-                <h3>Step 3: (If Needed) Install Python</h3>
-                <p>If you don't have Python, it's a quick install.</p>
-                <ol>
-                    <li>Go to the official Python website: <a href="https://www.python.org/downloads/" target="_blank">python.org/downloads</a>.</li>
-                    <li>Click the big "Download Python" button. It will get the right version for your computer.</li>
-                    <li>Run the installer you downloaded.</li>
-                    <li><strong class="os-tag windows">Important for Windows users:</strong> On the first screen of the installer, make sure to check the box that says <strong>"Add Python to PATH"</strong> before clicking "Install Now". This is very important!</li>
-                </ol>
-                <p>Once installed, close and reopen your terminal window and try the command from Step 2 again to make sure it worked.</p>
-            </div>
+                <h3>1. Chat with Gemini</h3>
+                <p>This is the most basic use. Just ask it anything!</p>
+                <pre><code id="code-chat-en">gemini "Explain what a black hole is in simple terms"</code><button class="copy-btn" onclick="copyToClipboard('code-chat-en')">Copy</button></pre>
 
-            <div class="step">
-                <h3>Step 4: Install Gemini CLI</h3>
-                <p>This is the final installation step! With your terminal open, copy and paste the following command and press Enter. This tells Python's package manager (pip) to download and install Gemini.</p>
-                <pre><code id="code2">pip install gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code2')">Copy</button></pre>
-                 <div class="note">
-                    <strong>Note:</strong> If you've been using <code>python3</code>, you may need to use <code>pip3</code> here: <code>pip3 install gemini-cli</code>.
+                <h3>2. Understand Your Code</h3>
+                <p>Have a file you don't understand? Ask Gemini to explain it. It can read files directly from your computer.</p>
+                <pre><code id="code-explain-en">gemini "Explain what this code does and suggest improvements" -f "path/to/your/file.js"</code><button class="copy-btn" onclick="copyToClipboard('code-explain-en')">Copy</button></pre>
+                
+                <h3>3. Generate Code from a Prompt</h3>
+                <p>Need a quick Python script or a React component? Describe what you want, and Gemini will build it for you.</p>
+                <pre><code id="code-generate-en">gemini "Write a Python function that takes a list of numbers and returns only the even ones"</code><button class="copy-btn" onclick="copyToClipboard('code-generate-en')">Copy</button></pre>
+                <div class="example-output"># Example Output:
+def get_even_numbers(numbers):
+  """
+  Takes a list of numbers and returns a new list containing only the even ones.
+  """
+  return [num for num in numbers if num % 2 == 0]
                 </div>
-            </div>
-
-            <div class="step">
-                <h3>Step 5: Verify Your Installation</h3>
-                <p>To make sure everything is working, ask Gemini for its version number:</p>
-                <pre><code id="code3">gemini --version</code><button class="copy-btn" onclick="copyToClipboard('code3')">Copy</button></pre>
-                <p>If you see a version number, congratulations! You've successfully installed the Gemini CLI.</p>
-            </div>
-
-            <h2>Part 2: Quickstart Examples</h2>
-            <p>Now for the fun part. Using it is as simple as typing `gemini` followed by your question in quotes.</p>
-
-            <div class="step">
-                <h3>Example 1: Your First Conversation</h3>
-                <p>Let's start with a simple question to make sure it's listening.</p>
-                <pre><code id="code4">gemini "Hello! In one sentence, what are you?"</code><button class="copy-btn" onclick="copyToClipboard('code4')">Copy</button></pre>
-                <div class="output">
-                    <strong>Example Output:</strong>
-                    <p>I am a large language model, trained by Google.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <h3>Example 2: Get Creative</h3>
-                <p>Ask Gemini to write something for you. How about a haiku (a 3-line poem with a 5, 7, 5 syllable structure) about computers?</p>
-                <pre><code id="code5">gemini "Write a haiku about a computer."</code><button class="copy-btn" onclick="copyToClipboard('code5')">Copy</button></pre>
-                <div class="output">
-                    <strong>Example Output:</strong>
-                    <p>Screen glows in the dark,<br>Silent thoughts in circuits run,<br>A world at my keys.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <h3>Example 3: Learn Something New</h3>
-                <p>Use it as a super-fast encyclopedia. Let's ask it to explain a technical topic in a simple way.</p>
-                <pre><code id="code6">gemini "Explain what an API is like I'm five years old."</code><button class="copy-btn" onclick="copyToClipboard('code6')">Copy</button></pre>
-                <div class="output">
-                    <strong>Example Output:</strong>
-                    <p>Imagine you're at a restaurant. You can't go into the kitchen to get your food, right? So you have a waiter (the API!). You tell the waiter what you want from the menu, the waiter goes to the kitchen, gets your food, and brings it back to you. You don't need to know how the kitchen works, just how to ask the waiter!</p>
-                </div>
-            </div>
-
-            <h3>And that's it!</h3>
-            <p>You're all set. You can now ask Gemini anything you want, right from your computer's terminal. Enjoy exploring!</p>
+                
+                <h3>4. Organize Your Files</h3>
+                <p>Let Gemini help you tidy up! For example, it can look at all the images in a folder and rename them based on what's in the picture.</p>
+                <pre><code id="code-organize-en">gemini "For each image in this folder, rename it to describe the image content" -f "path/to/your/images/*"</code><button class="copy-btn" onclick="copyToClipboard('code-organize-en')">Copy</button></pre>
+            </section>
         </div>
 
-        <!-- Spanish Content -->
         <div id="content-es" class="hidden">
-            <h1>¡Bienvenido a la Guía de Gemini CLI!</h1>
-            <p>Esta guía te enseñará a instalar y usar la Interfaz de Línea de Comandos (CLI) de Gemini. Piensa en la CLI como una forma de chatear con la IA de Gemini directamente desde una ventana de texto en tu computadora. ¡Es potente, rápida y más fácil de configurar de lo que crees!</p>
+            <section class="content-section">
+                <h2>Primero... ¿Qué es una "CLI"?</h2>
+                <p>Imagina que puedes hablar con tu computadora escribiendo comandos en lugar de hacer clic en botones. Eso es una Interfaz de Línea de Comandos (CLI). Es una forma potente y rápida que usan los desarrolladores (¡y ahora tú!) para hacer tareas. La Gemini CLI trae la poderosa IA de Google directamente a esa interfaz de texto.</p>
+            </section>
 
-            <h2>Parte 1: Instalación</h2>
-            <p>Antes de que podamos usar Gemini, necesitamos instalarlo. Esto requiere un programa llamado Python. Vayamos paso a paso.</p>
+            <section class="content-section">
+                <h2>Instalación</h2>
+                <p>Vamos a configurar Gemini CLI en tu computadora. Es un proceso simple usando <strong>npm</strong>, una herramienta que ayuda a instalar software como este.</p>
 
-            <div class="step">
-                <h3>Paso 1: Abrir la Ventana de Comandos (Terminal)</h3>
-                <p>Esta es la ventana especial donde escribiremos nuestros comandos.</p>
-                <ul>
-                    <li><strong class="os-tag windows">Windows:</strong> Presiona la tecla de Windows, escribe <code>cmd</code> o <code>PowerShell</code>, y presiona Enter.</li>
-                    <li><strong class="os-tag macos">macOS:</strong> Abre Finder, ve a Aplicaciones → Utilidades, y haz doble clic en <strong>Terminal</strong>.</li>
-                </ul>
-            </div>
+                <h3>1. Abre tu Terminal</h3>
+                <p>Esta es la aplicación donde escribirás tus comandos.</p>
+                    <ul>
+                        <li><strong>En macOS:</strong> Abre "Terminal" (la encuentras en Aplicaciones → Utilidades).</li>
+                        <li><strong>En Windows:</strong> Abre "PowerShell" (búscalo en el Menú de Inicio).</li>
+                    </ul>
 
-            <div class="step">
-                <h3>Paso 2: Verificar si tienes Python</h3>
-                <p>Gemini CLI es un paquete de Python, por lo que necesitas tener Python instalado. Veamos si lo tienes. Escribe este comando en tu terminal y presiona Enter:</p>
-                <pre><code id="code7">python --version</code><button class="copy-btn" onclick="copyToClipboard('code7')">Copy</button></pre>
+                <h3>2. Instala Gemini CLI</h3>
+                <p>Copia el siguiente comando, pégalo en tu terminal y presiona Enter. Esto descargará e instalará el paquete de Gemini CLI.</p>
+                <pre><code id="code-install-es">npm install -g @google/gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code-install-es')">Copy</button></pre>
+
+                <h3>3. Inicia Sesión con tu Cuenta de Google</h3>
+                <p>Después de la instalación, escribe <code>gemini</code> y presiona Enter. La CLI te guiará para que inicies sesión con tu cuenta de Google en tu navegador web. Es una configuración única para conectar la CLI a tu cuenta.</p>
+                <pre><code id="code-login-es">gemini</code><button class="copy-btn" onclick="copyToClipboard('code-login-es')">Copy</button></pre>
+
                 <div class="note">
-                    <strong>Nota:</strong> En algunos sistemas, especialmente en macOS y Linux, podrías necesitar usar <code>python3</code> en lugar de <code>python</code>. Si el comando anterior da un error, intenta: <code>python3 --version</code>.
+                    <p><strong>¡Eso es todo!</strong> Ya estás listo para empezar. Las siguientes secciones te muestran lo que puedes hacer.</p>
                 </div>
-                <p>Si ves un número de versión (ej. "Python 3.9.1"), ¡genial! Puedes saltar al Paso 4. Si no, no te preocupes, vamos a instalarlo.</p>
-            </div>
+            </section>
+            
+            <section class="content-section">
+                <h2>Ejemplos Geniales</h2>
+                <p>Aquí tienes algunas ideas para empezar a usar Gemini CLI ahora mismo.</p>
 
-            <div class="step">
-                <h3>Paso 3: (Si es necesario) Instalar Python</h3>
-                <p>Si no tienes Python, la instalación es rápida.</p>
-                <ol>
-                    <li>Ve al sitio web oficial de Python: <a href="https://www.python.org/downloads/" target="_blank">python.org/downloads</a>.</li>
-                    <li>Haz clic en el botón grande que dice "Download Python". Descargará la versión correcta para tu computadora.</li>
-                    <li>Ejecuta el instalador que descargaste.</li>
-                    <li><strong class="os-tag windows">Importante para usuarios de Windows:</strong> En la primera pantalla del instalador, asegúrate de marcar la casilla que dice <strong>"Add Python to PATH"</strong> antes de hacer clic en "Install Now". ¡Esto es muy importante!</li>
-                </ol>
-                <p>Una vez instalado, cierra y vuelve a abrir tu ventana de terminal e intenta el comando del Paso 2 de nuevo para asegurarte de que funcionó.</p>
-            </div>
+                <h3>1. Chatea con Gemini</h3>
+                <p>Este es el uso más básico. ¡Simplemente pregúntale lo que sea!</p>
+                <pre><code id="code-chat-es">gemini "Explica qué es un agujero negro en términos sencillos"</code><button class="copy-btn" onclick="copyToClipboard('code-chat-es')">Copy</button></pre>
 
-            <div class="step">
-                <h3>Paso 4: Instalar Gemini CLI</h3>
-                <p>¡Este es el último paso de la instalación! Con tu terminal abierta, copia y pega el siguiente comando y presiona Enter. Esto le dice al gestor de paquetes de Python (pip) que descargue e instale Gemini.</p>
-                <pre><code id="code8">pip install gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code8')">Copy</button></pre>
-                 <div class="note">
-                    <strong>Nota:</strong> Si has estado usando <code>python3</code>, puede que necesites usar <code>pip3</code> aquí: <code>pip3 install gemini-cli</code>.
+                <h3>2. Entiende tu Código</h3>
+                <p>¿Tienes un archivo de código que no entiendes? Pídele a Gemini que te lo explique. Puede leer archivos directamente de tu computadora.</p>
+                <pre><code id="code-explain-es">gemini "Explica qué hace este código y sugiere mejoras" -f "ruta/a/tu/archivo.js"</code><button class="copy-btn" onclick="copyToClipboard('code-explain-es')">Copy</button></pre>
+                
+                <h3>3. Genera Código a partir de una Descripción</h3>
+                <p>¿Necesitas un script rápido en Python o un componente de React? Describe lo que quieres y Gemini lo creará para ti.</p>
+                <pre><code id="code-generate-es">gemini "Escribe una función en Python que reciba una lista de números y devuelva solo los pares"</code><button class="copy-btn" onclick="copyToClipboard('code-generate-es')">Copy</button></pre>
+                <div class="example-output"># Ejemplo de Respuesta:
+def get_even_numbers(numbers):
+  """
+  Recibe una lista de números y devuelve una nueva lista solo con los números pares.
+  """
+  return [num for num in numbers if num % 2 == 0]
                 </div>
-            </div>
 
-            <div class="step">
-                <h3>Paso 5: Verificar tu Instalación</h3>
-                <p>Para asegurarte de que todo funciona, pregúntale a Gemini su número de versión:</p>
-                <pre><code id="code9">gemini --version</code><button class="copy-btn" onclick="copyToClipboard('code9')">Copy</button></pre>
-                <p>Si ves un número de versión, ¡felicidades! Has instalado correctamente Gemini CLI.</p>
-            </div>
-
-            <h2>Parte 2: Ejemplos de Inicio Rápido</h2>
-            <p>Ahora la parte divertida. Usarlo es tan simple como escribir `gemini` seguido de tu pregunta entre comillas.</p>
-
-            <div class="step">
-                <h3>Ejemplo 1: Tu Primera Conversación</h3>
-                <p>Comencemos con una pregunta simple para asegurarnos de que está escuchando.</p>
-                <pre><code id="code10">gemini "¡Hola! En una oración, ¿qué eres?"</code><button class="copy-btn" onclick="copyToClipboard('code10')">Copy</button></pre>
-                <div class="output">
-                    <strong>Ejemplo de Respuesta:</strong>
-                    <p>Soy un modelo de lenguaje grande, entrenado por Google.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <h3>Ejemplo 2: Ponte Creativo</h3>
-                <p>Pídele a Gemini que escriba algo para ti. ¿Qué tal un haiku (un poema de 3 versos con una estructura de 5, 7, 5 sílabas) sobre computadoras?</p>
-                <pre><code id="code11">gemini "Escribe un haiku sobre una computadora."</code><button class="copy-btn" onclick="copyToClipboard('code11')">Copy</button></pre>
-                <div class="output">
-                    <strong>Ejemplo de Respuesta:</strong>
-                    <p>Brilla la pantalla,<br>Ideas en circuitos fluyen,<br>Un mundo a mis pies.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <h3>Ejemplo 3: Aprende Algo Nuevo</h3>
-                <p>Úsalo como una enciclopedia súper rápida. Pidámosle que explique un tema técnico de una manera sencilla.</p>
-                <pre><code id="code12">gemini "Explica qué es una API como si yo tuviera cinco años."</code><button class="copy-btn" onclick="copyToClipboard('code12')">Copy</button></pre>
-                <div class="output">
-                    <strong>Ejemplo de Respuesta:</strong>
-                    <p>Imagina que estás en un restaurante. No puedes entrar en la cocina a buscar tu comida, ¿verdad? Para eso tienes un mesero (¡la API!). Le dices al mesero lo que quieres del menú, el mesero va a la cocina, busca tu comida y te la trae. ¡No necesitas saber cómo funciona la cocina, solo cómo pedirle al mesero!</p>
-                </div>
-            </div>
-
-            <h3>¡Y eso es todo!</h3>
-            <p>Ya estás listo. Ahora puedes preguntarle a Gemini lo que quieras, directamente desde la terminal de tu computadora. ¡Disfruta explorando!</p>
+                <h3>4. Organiza tus Archivos</h3>
+                <p>¡Deja que Gemini te ayude a ordenar! Por ejemplo, puede ver todas las imágenes en una carpeta y renombrarlas según lo que haya en la foto.</p>
+                <pre><code id="code-organize-es">gemini "Por cada imagen en esta carpeta, renuémbrala para describir el contenido de la imagen" -f "ruta/a/tus/imagenes/*"</code><button class="copy-btn" onclick="copyToClipboard('code-organize-es')">Copy</button></pre>
+            </section>
         </div>
     </div>
 
@@ -310,16 +326,23 @@
             const btnEn = document.getElementById('btn-en');
             const btnEs = document.getElementById('btn-es');
 
+            const headerTitle = document.getElementById('header-title');
+            const headerSubtitle = document.getElementById('header-subtitle');
+
             if (lang === 'en') {
                 contentEn.classList.remove('hidden');
                 contentEs.classList.add('hidden');
                 btnEn.classList.add('active');
                 btnEs.classList.remove('active');
+                headerTitle.textContent = 'Quickstart with Gemini CLI';
+                headerSubtitle.textContent = "Your AI-powered assistant, right in your computer's terminal.";
             } else {
                 contentEn.classList.add('hidden');
                 contentEs.classList.remove('hidden');
                 btnEn.classList.remove('active');
                 btnEs.classList.add('active');
+                headerTitle.textContent = 'Guía Rápida de Gemini CLI';
+                headerSubtitle.textContent = 'Tu asistente con IA, directo en la terminal de tu computadora.';
             }
         }
 
@@ -327,15 +350,26 @@
             const codeElement = document.getElementById(elementId);
             const textToCopy = codeElement.innerText;
             navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalBtn = codeElement.nextElementSibling;
-                originalBtn.innerText = 'Copied!';
+                const button = codeElement.nextElementSibling;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
                 setTimeout(() => {
-                    originalBtn.innerText = 'Copy';
+                    button.textContent = 'Copy';
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
             });
         }
+        
+        // Set initial language based on browser settings
+        document.addEventListener('DOMContentLoaded', () => {
+            const userLang = navigator.language || navigator.userLanguage; 
+            if (userLang.startsWith('es')) {
+                switchLang('es');
+            } else {
+                switchLang('en');
+            }
+        });
     </script>
 </body>
 </html>
