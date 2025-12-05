@@ -207,23 +207,29 @@
 
             <section class="content-section">
                 <h2>Installation</h2>
-                <p>Let's get Gemini CLI set up on your computer. It’s a simple process using <strong>npm</strong>, a tool that helps install software like this.</p>
+                <p>Let's get Gemini CLI set up on your computer. It’s a simple process using <strong>npm</strong>, a tool that helps install software like this. First, you'll need to have Node.js and npm installed. You can get them from the <a href="https://nodejs.org/" target="_blank">official Node.js website</a>.</p>
 
-                <h3>1. Open Your Terminal</h3>
-                <p>This is the app where you'll type your commands.
-                    <ul>
-                        <li><strong>On macOS:</strong> Open "Terminal" (you can find it in Applications → Utilities).</li>
-                        <li><strong>On Windows:</strong> Open "PowerShell" (search for it in the Start Menu).</li>
-                    </ul>
-                </p>
+                <h3>For macOS</h3>
+                <ol>
+                    <li>Open "Terminal" (you can find it in Applications → Utilities).</li>
+                    <li>Copy the command below, paste it into your terminal, and press Enter. This will download and install the Gemini CLI package.
+                        <pre><code id="code-install-mac-en">npm install -g @google/gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code-install-mac-en')">Copy</button></pre>
+                    </li>
+                    <li>After installation, type <code>gemini</code> and press Enter. The CLI will guide you to log in with your Google account in your web browser. This is a one-time setup to connect the CLI to your account.
+                        <pre><code id="code-login-mac-en">gemini</code><button class="copy-btn" onclick="copyToClipboard('code-login-mac-en')">Copy</button></pre>
+                    </li>
+                </ol>
 
-                <h3>2. Install Gemini CLI</h3>
-                <p>Copy the command below, paste it into your terminal, and press Enter. This will download and install the Gemini CLI package.</p>
-                <pre><code id="code-install-en">npm install -g @google/gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code-install-en')">Copy</button></pre>
-
-                <h3>3. Log In to Your Google Account</h3>
-                <p>After installation, type <code>gemini</code> and press Enter. The CLI will guide you to log in with your Google account in your web browser. This is a one-time setup to connect the CLI to your account.</p>
-                <pre><code id="code-login-en">gemini</code><button class="copy-btn" onclick="copyToClipboard('code-login-en')">Copy</button></pre>
+                <h3>For Windows</h3>
+                <ol>
+                    <li>Open "PowerShell" (search for it in the Start Menu).</li>
+                    <li>Copy the command below, paste it into your terminal, and press Enter. This will download and install the Gemini CLI package.
+                        <pre><code id="code-install-win-en">npm install -g @google/gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code-install-win-en')">Copy</button></pre>
+                    </li>
+                    <li>After installation, type <code>gemini</code> and press Enter. The CLI will guide you to log in with your Google account in your web browser. This is a one-time setup to connect the CLI to your account.
+                        <pre><code id="code-login-win-en">gemini</code><button class="copy-btn" onclick="copyToClipboard('code-login-win-en')">Copy</button></pre>
+                    </li>
+                </ol>
 
                 <div class="note">
                     <p><strong>That's it!</strong> You're ready to go. The next sections show you what you can do.</p>
@@ -257,6 +263,12 @@ def get_even_numbers(numbers):
                 <p>Let Gemini help you tidy up! For example, it can look at all the images in a folder and rename them based on what's in the picture.</p>
                 <pre><code id="code-organize-en">gemini "For each image in this folder, rename it to describe the image content" -f "path/to/your/images/*"</code><button class="copy-btn" onclick="copyToClipboard('code-organize-en')">Copy</button></pre>
             </section>
+            
+            <section class="content-section">
+                <h2>Official Documentation</h2>
+                <p>For more detailed information and advanced usage, check out the official Gemini CLI documentation.</p>
+                <a href="https://geminicli.com/docs/get-started/" target="_blank">Go to Official Documentation</a>
+            </section>
         </div>
 
         <div id="content-es" class="hidden">
@@ -267,22 +279,29 @@ def get_even_numbers(numbers):
 
             <section class="content-section">
                 <h2>Instalación</h2>
-                <p>Vamos a configurar Gemini CLI en tu computadora. Es un proceso simple usando <strong>npm</strong>, una herramienta que ayuda a instalar software como este.</p>
+                <p>Vamos a configurar Gemini CLI en tu computadora. Es un proceso simple usando <strong>npm</strong>, una herramienta que ayuda a instalar software como este. Primero, necesitarás tener Node.js y npm instalados. Puedes obtenerlos desde el <a href="https://nodejs.org/" target="_blank">sitio web oficial de Node.js</a>.</p>
 
-                <h3>1. Abre tu Terminal</h3>
-                <p>Esta es la aplicación donde escribirás tus comandos.</p>
-                    <ul>
-                        <li><strong>En macOS:</strong> Abre "Terminal" (la encuentras en Aplicaciones → Utilidades).</li>
-                        <li><strong>En Windows:</strong> Abre "PowerShell" (búscalo en el Menú de Inicio).</li>
-                    </ul>
+                <h3>Para macOS</h3>
+                <ol>
+                    <li>Abre "Terminal" (la encuentras en Aplicaciones → Utilidades).</li>
+                    <li>Copia el siguiente comando, pégalo en tu terminal y presiona Enter. Esto descargará e instalará el paquete de Gemini CLI.
+                        <pre><code id="code-install-mac-es">npm install -g @google/gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code-install-mac-es')">Copy</button></pre>
+                    </li>
+                    <li>Después de la instalación, escribe <code>gemini</code> y presiona Enter. La CLI te guiará para que inicies sesión con tu cuenta de Google en tu navegador web. Es una configuración única para conectar la CLI a tu cuenta.
+                        <pre><code id="code-login-mac-es">gemini</code><button class="copy-btn" onclick="copyToClipboard('code-login-mac-es')">Copy</button></pre>
+                    </li>
+                </ol>
 
-                <h3>2. Instala Gemini CLI</h3>
-                <p>Copia el siguiente comando, pégalo en tu terminal y presiona Enter. Esto descargará e instalará el paquete de Gemini CLI.</p>
-                <pre><code id="code-install-es">npm install -g @google/gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code-install-es')">Copy</button></pre>
-
-                <h3>3. Inicia Sesión con tu Cuenta de Google</h3>
-                <p>Después de la instalación, escribe <code>gemini</code> y presiona Enter. La CLI te guiará para que inicies sesión con tu cuenta de Google en tu navegador web. Es una configuración única para conectar la CLI a tu cuenta.</p>
-                <pre><code id="code-login-es">gemini</code><button class="copy-btn" onclick="copyToClipboard('code-login-es')">Copy</button></pre>
+                <h3>Para Windows</h3>
+                <ol>
+                    <li>Abre "PowerShell" (búscalo en el Menú de Inicio).</li>
+                    <li>Copia el siguiente comando, pégalo en tu terminal y presiona Enter. Esto descargará e instalará el paquete de Gemini CLI.
+                        <pre><code id="code-install-win-es">npm install -g @google/gemini-cli</code><button class="copy-btn" onclick="copyToClipboard('code-install-win-es')">Copy</button></pre>
+                    </li>
+                    <li>Después de la instalación, escribe <code>gemini</code> y presiona Enter. La CLI te guiará para que inicies sesión con tu cuenta de Google en tu navegador web. Es una configuración única para conectar la CLI a tu cuenta.
+                        <pre><code id="code-login-win-es">gemini</code><button class="copy-btn" onclick="copyToClipboard('code-login-win-es')">Copy</button></pre>
+                    </li>
+                </ol>
 
                 <div class="note">
                     <p><strong>¡Eso es todo!</strong> Ya estás listo para empezar. Las siguientes secciones te muestran lo que puedes hacer.</p>
@@ -315,6 +334,12 @@ def get_even_numbers(numbers):
                 <h3>4. Organiza tus Archivos</h3>
                 <p>¡Deja que Gemini te ayude a ordenar! Por ejemplo, puede ver todas las imágenes en una carpeta y renombrarlas según lo que haya en la foto.</p>
                 <pre><code id="code-organize-es">gemini "Por cada imagen en esta carpeta, renuémbrala para describir el contenido de la imagen" -f "ruta/a/tus/imagenes/*"</code><button class="copy-btn" onclick="copyToClipboard('code-organize-es')">Copy</button></pre>
+            </section>
+            
+            <section class="content-section">
+                <h2>Documentación Oficial</h2>
+                <p>Para obtener información más detallada y un uso avanzado, consulta la documentación oficial de Gemini CLI.</p>
+                <a href="https://geminicli.com/docs/get-started/" target="_blank">Ir a la Documentación Oficial</a>
             </section>
         </div>
     </div>
